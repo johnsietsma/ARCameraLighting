@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/GoogleARCore/HelloARExample/Scenes/HelloAR.unity
+    guid: e6a6fa04348cb45c9b0221eb19c946da
+  - enabled: 1
+    path: Assets/Scenes/EnvironmentLighting.unity
+    guid: 438cec6b0be649b479ddc81967681a6b
