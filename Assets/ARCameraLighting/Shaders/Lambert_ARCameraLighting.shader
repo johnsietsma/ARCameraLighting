@@ -31,6 +31,7 @@
 		#include "ARCameraLighting.cginc"
 		#include "Lighting.cginc"
 
+		// This should be in an include file, but it's giving me build errors on Android :(
 		float2 SphereMapUVCoords( float3 viewDir, float3 normal )
 		{
 			// Sphere mapping. Find reflection and tranform into UV coords.
