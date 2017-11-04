@@ -44,7 +44,7 @@ namespace GoogleARCore
         /// </summary>
         public void Update()
         {
-#if !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
             pixelIntensity = Frame.LightEstimate.PixelIntensity;
 #endif
 

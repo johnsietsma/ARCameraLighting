@@ -11,10 +11,10 @@ public class ARManager : MonoBehaviour {
 	public bool arCoreActive = false;
 
 	void Awake () {
-		#if UNITY_IOS
+		#if UNITY_IOS && !UNITY_EDITOR
 		arKitActive = true;
 		arCoreActive = false;
-		#elif UNITY_ANDROID
+		#elif UNITY_ANDROID && !UNITY_EDITOR
 		arKitActive = false;
 		arCoreActive = true;
 		#endif

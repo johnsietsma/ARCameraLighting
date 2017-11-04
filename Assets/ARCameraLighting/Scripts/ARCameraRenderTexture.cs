@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
  * Optional downsize and blue the texture.
  */
 [RequireComponent(typeof(FastBlur))]
-public class ARCoreCameraRenderTexture : MonoBehaviour
+public class ARCameraRenderTexture : MonoBehaviour
 {
     // Optionally blur the render tex
     public bool shouldBlurRenderTexture;
@@ -26,7 +26,7 @@ public class ARCoreCameraRenderTexture : MonoBehaviour
     // The RenderTexture that is being rendered to
     //public Texture RenderTexture { get { return Shader.GetGlobalTexture(renderTextureId); } }
 
-    private Material blitMat;
+	private IARCameraBlit cameraBlit;
     private CommandBuffer m_blitCommandBuffer;
     private CommandBuffer m_releaseCommandBuffer;
     private FastBlur fastBlur;
@@ -34,11 +34,6 @@ public class ARCoreCameraRenderTexture : MonoBehaviour
 
     IEnumerator Start()
     {
-        // Load up the material that does the blit.
-
-        blitMat = Resources.Load<Material>("Materials/ARCoreBlit");
-        Debug.Assert(blitMat);
-
         // Wait for the AR session to start
         while (!ARResources.IsConnected)
         {
@@ -50,8 +45,21 @@ public class ARCoreCameraRenderTexture : MonoBehaviour
 
     private void SetupBackgroundBlit()
     {
-        // Get a reference to the AR camera's Texture 
-        Texture cameraTexture = ARResources.CameraTexture ?? defaultTexture;
+		IARCameraBlit cameraBlit;
+#if UNITY_ANDROID && !UNITY_EDITOR
+		cameraBlit = gameObject.AddComponent<ARCoreCameraBlit>();
+#elif UNITY_IOS && !UNITY_EDITOR
+		ARKitCameraBlit arkitCameraBlit = gameObject.AddComponent<ARKitCameraBlit>();
+		var arVideo = Camera.main.GetComponent<UnityEngine.XR.iOS.UnityARVideo>();
+		Debug.Assert(arVideo);
+		arkitCameraBlit.clearMaterial = arVideo.m_ClearMaterial;
+		cameraBlit = arkitCameraBlit;
+#else
+		AREditorCameraBlit editorCameraBlit = gameObject.AddComponent<AREditorCameraBlit>();
+		editorCameraBlit.defaultTexture = defaultTexture;
+		cameraBlit = editorCameraBlit;
+#endif
+
         Camera arCamera = ARResources.Camera;
 
         // Optional shrink the size of the texture we're working with.
@@ -73,8 +81,8 @@ public class ARCoreCameraRenderTexture : MonoBehaviour
         m_blitCommandBuffer.GetTemporaryRT(RenderTextureID, renderTextureWidth, renderTextureHeight, 0, FilterMode.Bilinear);
         m_blitCommandBuffer.name = "Get ARBackground";
 
-        // Capture the camera's render texture
-        m_blitCommandBuffer.Blit(cameraTexture, RenderTextureID, blitMat);
+
+		cameraBlit.BlitCameraTexture (m_blitCommandBuffer, RenderTextureID);
 
         if (shouldBlurRenderTexture)
         {
@@ -91,9 +99,6 @@ public class ARCoreCameraRenderTexture : MonoBehaviour
         m_releaseCommandBuffer = new CommandBuffer();
         m_releaseCommandBuffer.name = "Release ARBackground";
         m_releaseCommandBuffer.ReleaseTemporaryRT(RenderTextureID);
-        if( shouldBlurRenderTexture) {
-            fastBlur.ReleaseBlurTexture(m_releaseCommandBuffer);
-        }
         arCamera.AddCommandBuffer(CameraEvent.AfterSkybox, m_releaseCommandBuffer);
 
         isCapturing = true;
@@ -102,9 +107,5 @@ public class ARCoreCameraRenderTexture : MonoBehaviour
         ARResources.RegisterChangeCallback(SetupBackgroundBlit);
     }
 
-    private void Update()
-    {
-        // TODO: Required?
-        blitMat.SetFloat("_ScreenOrientation", (float)Screen.orientation);
-    }
+
 }

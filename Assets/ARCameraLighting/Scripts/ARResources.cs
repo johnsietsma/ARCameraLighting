@@ -1,6 +1,4 @@
-﻿using GoogleARCore;
-using GoogleAR.UnityNative;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +9,10 @@ using UnityEngine;
  */
 public static class ARResources
 {
-#if UNITY_ANDROID && !UNITY_EDITOR
+	#if UNITY_ANDROID && !UNITY_EDITOR
 	// ---- ARCore ----
+	using GoogleARCore;
+	using GoogleAR.UnityNative;
 
     // The Unity Camera being used to render the physical camera
     public static Camera Camera
@@ -58,11 +58,29 @@ public static class ARResources
         Device.backgroundRenderer.backgroundRendererChanged -= callback;
     }
 
+
 #elif UNITY_IOS && !UNITY_EDITOR
 	// ---- ARKit ----
 
+	// The Unity Camera being used to render the physical camera
+	public static Camera Camera {
+		get { return Camera.main; } // TODO: Use ARCameraManager.m_camera;
+	}
 
-#else
+	// Is the AR session connected?
+	public static bool IsConnected {
+		get { return true; }
+	}
+
+	public static void RegisterChangeCallback (Action callback)
+	{
+	}
+
+	public static void DeregisterChangeCallback (Action callback)
+	{
+	}
+
+	#else
     // ---- Editor (for debugging) ----
 
     public static bool IsConnected { get { return true; } }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.99999946, g: 0.99999946, b: 0.99999946, a: 1}
+  m_IndirectSpecularColor: {r: 0.5019536, g: 0.5019536, b: 0.5019536, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1170,16 +1170,30 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 114906785935455936, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: m_worldRoot
-      value: 
-      objectReference: {fileID: 1705311937}
     - target: {fileID: 114697273832221310, guid: b1582f5587328e24c9d8b2c42a22a3ab,
         type: 2}
       propertyPath: m_HitTransform
       value: 
       objectReference: {fileID: 1705311939}
+    - target: {fileID: 114906785935455936, guid: b1582f5587328e24c9d8b2c42a22a3ab,
+        type: 2}
+      propertyPath: m_worldRoot
+      value: 
+      objectReference: {fileID: 1705311937}
+    - target: {fileID: 1470059395866530, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114160294398464826, guid: b1582f5587328e24c9d8b2c42a22a3ab,
+        type: 2}
+      propertyPath: arCoreActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114160294398464826, guid: b1582f5587328e24c9d8b2c42a22a3ab,
+        type: 2}
+      propertyPath: arKitActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
   m_IsPrefabParent: 0

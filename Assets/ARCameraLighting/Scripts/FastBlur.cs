@@ -20,8 +20,6 @@ public class FastBlur : MonoBehaviour
 
     public BlurType blurType = BlurType.StandardGauss;
 
-    public static int blurredTextureID = Shader.PropertyToID("_BlurredTexture");
-
     private Material blurMaterial = null;
     private Material blendMaterial = null;
 
@@ -36,18 +34,15 @@ public class FastBlur : MonoBehaviour
 
     public void CreateBlurCommandBuffer(CommandBuffer commandBuffer, RenderTargetIdentifier sourceID, int renderTextureWidth, int renderTextureHeight)
     {
-        commandBuffer.GetTemporaryRT(blurredTextureID, renderTextureWidth, renderTextureHeight, 0, FilterMode.Bilinear);
+		int rt1 = Shader.PropertyToID("BlurBuffer1");
+		int rt2 = Shader.PropertyToID("BlurBuffer2");
+		int rt = rt2;
 
         commandBuffer.SetGlobalVector("_Parameter", new Vector4(blurSize, -blurSize, 0.0f, 0.0f));
-        int rt = Shader.PropertyToID("BlurSource");
         commandBuffer.GetTemporaryRT(rt, renderTextureWidth, renderTextureHeight, 0, FilterMode.Bilinear);
         commandBuffer.Blit(sourceID, rt, blurMaterial, 0);
 
         var passOffs = blurType == BlurType.StandardGauss ? 0 : 2;
-
-        int rt1 = Shader.PropertyToID("BlurBuffer1");
-        int rt2 = Shader.PropertyToID("BlurBuffer2");
-
 
         for (int i = 0; i < blurIterations; i++)
         {
@@ -69,10 +64,5 @@ public class FastBlur : MonoBehaviour
 
         commandBuffer.Blit(rt, sourceID, blurMaterial);
         commandBuffer.ReleaseTemporaryRT(rt);
-    }
-
-    public void ReleaseBlurTexture( CommandBuffer commandBuffer )
-    {
-        commandBuffer.ReleaseTemporaryRT(blurredTextureID);
     }
 }

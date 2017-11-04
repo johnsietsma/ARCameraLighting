@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Change the ambient light intensity based on the camera pixel intensity
-[RequireComponent(typeof(ARCoreCameraRenderTexture))]
 [RequireComponent(typeof(EnvironmentalLightEx))]
 public class EnvironmentalAmbientLight : MonoBehaviour
 {
