@@ -11,7 +11,7 @@ public class ARKitCameraBlit : MonoBehaviour, IARCameraBlit {
 	public void BlitCameraTexture( CommandBuffer commandBuffer, int destinationTextureID )
 	{
 		// Piggyback off the UnityARVideo material
-		commandBuffer.Blit(null, BuiltinRenderTextureType.CurrentActive, clearMaterial);
+		commandBuffer.Blit(null, destinationTextureID, clearMaterial);
 	}
 }
 
