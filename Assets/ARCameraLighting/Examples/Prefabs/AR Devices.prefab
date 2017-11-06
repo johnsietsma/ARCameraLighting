@@ -533,8 +533,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fc6bde01469c7b4badee5362f191d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blurSize: 3.98
-  blurIterations: 1
+  blurSize: 5
+  blurIterations: 3
   blurType: 0
 --- !u!114 &114360025673643258
 MonoBehaviour:
@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2a193c4fcef0447ac73b7686736c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRenderTexture: {fileID: 0}
+  targetRenderTexture: {fileID: 8400000, guid: 60bd05d5765dda34dae038b49175133b, type: 2}
   shouldBlurRenderTexture: 1
   defaultTexture: {fileID: 2800000, guid: c202fec7e299fde408aafc9b1b79332d, type: 3}
 --- !u!114 &114838109114313984
@@ -670,8 +670,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14538acf563ec4843a6fb329bf09c971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pixelIntensity: 0.5
-  colorScale: 1.1764706
+  pixelIntensity: 0.575
+  colorScale: 1.218543
 --- !u!114 &114969767662964178
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -744,7 +744,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1176336384849508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -1}
+  m_LocalPosition: {x: 0, y: 1, z: -3.364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4867372572976548}
