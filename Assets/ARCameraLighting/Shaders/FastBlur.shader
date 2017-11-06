@@ -4,7 +4,6 @@
 Shader "Hidden/FastBlur" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
-		_Bloom ("Bloom (RGB)", 2D) = "black" {}
 	}
 	
 	CGINCLUDE
@@ -12,7 +11,6 @@ Shader "Hidden/FastBlur" {
 		#include "UnityCG.cginc"
 
 		sampler2D _MainTex;
-		sampler2D _Bloom;
 				
 		uniform half4 _MainTex_TexelSize;
 		uniform half4 _Parameter;

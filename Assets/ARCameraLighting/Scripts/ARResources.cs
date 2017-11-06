@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GoogleARCore;
+using GoogleAR.UnityNative;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +13,6 @@ public static class ARResources
 {
 	#if UNITY_ANDROID && !UNITY_EDITOR
 	// ---- ARCore ----
-	using GoogleARCore;
-	using GoogleAR.UnityNative;
 
     // The Unity Camera being used to render the physical camera
     public static Camera Camera

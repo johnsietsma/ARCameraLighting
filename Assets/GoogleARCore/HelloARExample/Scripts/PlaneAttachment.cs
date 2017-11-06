@@ -40,7 +40,7 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         public void Start()
         {
-#if !UNITY_ANDROID
+#if !UNITY_ANDROID || UNITY_EDITOR
             enabled = false;
 #endif
 

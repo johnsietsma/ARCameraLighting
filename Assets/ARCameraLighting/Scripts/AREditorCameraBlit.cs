@@ -10,7 +10,7 @@ public class AREditorCameraBlit : MonoBehaviour, IARCameraBlit
 
 	private Material blitMat;
 
-	void Start() 
+	void Awake() 
 	{
 		// Load up the material that does the blit.
 		blitMat = Resources.Load<Material>("Materials/ARCoreBlit");
@@ -19,7 +19,8 @@ public class AREditorCameraBlit : MonoBehaviour, IARCameraBlit
 
 	public void BlitCameraTexture( CommandBuffer commandBuffer, int destinationTextureID )
 	{
-		commandBuffer.Blit(defaultTexture, destinationTextureID, blitMat);
+        Debug.Assert(blitMat);
+        commandBuffer.Blit(defaultTexture, destinationTextureID, blitMat);
 	}
 }
 

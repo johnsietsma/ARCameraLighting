@@ -574,8 +574,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2a193c4fcef0447ac73b7686736c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetRenderTexture: {fileID: 0}
   shouldBlurRenderTexture: 1
-  downsampleLevel: 2
   defaultTexture: {fileID: 2800000, guid: c202fec7e299fde408aafc9b1b79332d, type: 3}
 --- !u!114 &114669133857776624
 MonoBehaviour:
@@ -623,8 +623,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2a193c4fcef0447ac73b7686736c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetRenderTexture: {fileID: 0}
   shouldBlurRenderTexture: 1
-  downsampleLevel: 0
   defaultTexture: {fileID: 2800000, guid: c202fec7e299fde408aafc9b1b79332d, type: 3}
 --- !u!114 &114838109114313984
 MonoBehaviour:

@@ -9,31 +9,32 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(FastBlur))]
 public class ARCameraRenderTexture : MonoBehaviour
 {
+    public RenderTexture targetRenderTexture;
+
     // Optionally blur the render tex
     public bool shouldBlurRenderTexture;
-
-    [Range(0, 3)]
-    public int downsampleLevel = 1;
 
     // For debugging, use this texture in editor instead of the camera feed
     public Texture defaultTexture;
 
-    public static int RenderTextureID = Shader.PropertyToID("_ARCameraRenderTexture");
-
     // Are we capturing the camera feed?
     public bool IsCapturing { get { return isCapturing; } }
 
-    // The RenderTexture that is being rendered to
-    //public Texture RenderTexture { get { return Shader.GetGlobalTexture(renderTextureId); } }
-
 	private IARCameraBlit cameraBlit;
+    private int workingRenderTextureID = Shader.PropertyToID("_ARCameraRenderTexture");
     private CommandBuffer m_blitCommandBuffer;
     private CommandBuffer m_releaseCommandBuffer;
     private FastBlur fastBlur;
+    private Material blendMaterial = null;
     private bool isCapturing;
 
     IEnumerator Start()
     {
+        Debug.Assert(targetRenderTexture, "Please assign a target RenderTexture");
+
+        blendMaterial = Resources.Load<Material>("Materials/Blend");
+        Debug.Assert(blendMaterial);
+
         // Wait for the AR session to start
         while (!ARResources.IsConnected)
         {
@@ -62,11 +63,8 @@ public class ARCameraRenderTexture : MonoBehaviour
 
         Camera arCamera = ARResources.Camera;
 
-        // Optional shrink the size of the texture we're working with.
-        //   Provides a cheap blurring through bilinear filtering, also is more performant to work
-        //   with a smaller texture
-        int renderTextureWidth = Screen.width >> downsampleLevel;
-        int renderTextureHeight = Screen.height >> downsampleLevel;
+        int renderTextureWidth = targetRenderTexture.width;
+        int renderTextureHeight = targetRenderTexture.height;
 
         // Clean up any previous command buffer and events hooks
         if (m_blitCommandBuffer != null)
@@ -78,19 +76,21 @@ public class ARCameraRenderTexture : MonoBehaviour
 
         // Create the blit command buffer
         m_blitCommandBuffer = new CommandBuffer();
-        m_blitCommandBuffer.GetTemporaryRT(RenderTextureID, renderTextureWidth, renderTextureHeight, 0, FilterMode.Bilinear);
+        m_blitCommandBuffer.GetTemporaryRT(workingRenderTextureID, renderTextureWidth, renderTextureHeight, 0, FilterMode.Bilinear);
         m_blitCommandBuffer.name = "Get ARBackground";
 
-
-		cameraBlit.BlitCameraTexture (m_blitCommandBuffer, RenderTextureID);
+		cameraBlit.BlitCameraTexture(m_blitCommandBuffer, workingRenderTextureID);
 
         if (shouldBlurRenderTexture)
         {
             // The optional blur step
             fastBlur = GetComponent<FastBlur>();
             Debug.Assert(fastBlur);
-            fastBlur.CreateBlurCommandBuffer(m_blitCommandBuffer, RenderTextureID, renderTextureWidth, renderTextureHeight);
+            fastBlur.CreateBlurCommandBuffer(m_blitCommandBuffer, workingRenderTextureID, renderTextureWidth, renderTextureHeight);
         }
+
+        // Copy over to the target texture. Use a blend texture to stop light flickering.
+        m_blitCommandBuffer.Blit(workingRenderTextureID, targetRenderTexture, blendMaterial);
 
         // Run the command buffer just before opaque rendering
         arCamera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_blitCommandBuffer);
@@ -98,7 +98,7 @@ public class ARCameraRenderTexture : MonoBehaviour
         // Cleanup the temp render textures
         m_releaseCommandBuffer = new CommandBuffer();
         m_releaseCommandBuffer.name = "Release ARBackground";
-        m_releaseCommandBuffer.ReleaseTemporaryRT(RenderTextureID);
+        m_releaseCommandBuffer.ReleaseTemporaryRT(workingRenderTextureID);
         arCamera.AddCommandBuffer(CameraEvent.AfterSkybox, m_releaseCommandBuffer);
 
         isCapturing = true;

@@ -21,26 +21,26 @@ public class FastBlur : MonoBehaviour
     public BlurType blurType = BlurType.StandardGauss;
 
     private Material blurMaterial = null;
-    private Material blendMaterial = null;
 
-    private void Start()
+    private void Awake()
     {
         blurMaterial = Resources.Load<Material>("Materials/FastBlur");
         Debug.Assert(blurMaterial);
-        blendMaterial = Resources.Load<Material>("Materials/Blend");
-        Debug.Assert(blendMaterial);
     }
 
-
-    public void CreateBlurCommandBuffer(CommandBuffer commandBuffer, RenderTargetIdentifier sourceID, int renderTextureWidth, int renderTextureHeight)
+    public void CreateBlurCommandBuffer(CommandBuffer commandBuffer, int sourceID, int renderTextureWidth, int renderTextureHeight)
     {
-		int rt1 = Shader.PropertyToID("BlurBuffer1");
+        Debug.Assert(blurMaterial);
+
+        int rt1 = Shader.PropertyToID("BlurBuffer1");
 		int rt2 = Shader.PropertyToID("BlurBuffer2");
 		int rt = rt2;
 
         commandBuffer.SetGlobalVector("_Parameter", new Vector4(blurSize, -blurSize, 0.0f, 0.0f));
         commandBuffer.GetTemporaryRT(rt, renderTextureWidth, renderTextureHeight, 0, FilterMode.Bilinear);
-        commandBuffer.Blit(sourceID, rt, blurMaterial, 0);
+
+        // Take a copy of the source texture
+        commandBuffer.Blit(sourceID, rt);
 
         var passOffs = blurType == BlurType.StandardGauss ? 0 : 2;
 
@@ -62,7 +62,8 @@ public class FastBlur : MonoBehaviour
             rt = rt2;
         }
 
-        commandBuffer.Blit(rt, sourceID, blurMaterial);
+        // Blit the source back again
+        commandBuffer.Blit(rt, sourceID);
         commandBuffer.ReleaseTemporaryRT(rt);
     }
 }

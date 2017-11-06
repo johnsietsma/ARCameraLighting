@@ -8,7 +8,7 @@ public class ARCoreCameraBlit : MonoBehaviour, IARCameraBlit {
 
 	private Material blitMat;
 
-	void Start() 
+	void Awake() 
 	{
 		// Load up the material that does the blit.
 		blitMat = Resources.Load<Material>("Materials/ARCoreBlit");
