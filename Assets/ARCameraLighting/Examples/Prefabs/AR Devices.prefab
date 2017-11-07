@@ -149,6 +149,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1544598841316006
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4507453061660540}
+  - component: {fileID: 114754166121510258}
+  m_Layer: 0
+  m_Name: PlaneBuilder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1676531596590114
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,6 +263,7 @@ Transform:
   - {fileID: 4438215630017664}
   - {fileID: 4725099830772730}
   - {fileID: 4700935335010472}
+  - {fileID: 4507453061660540}
   m_Father: {fileID: 4077583497246882}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -289,6 +306,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4121156267176670}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4507453061660540
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1544598841316006}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4121156267176670}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4644660745562760
 Transform:
@@ -612,6 +642,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a60fdd95506924eb05cfddfff1a364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114754166121510258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1544598841316006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31cac8edf84834043ac167deaeba16a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planePrefab: {fileID: 1372998203143648, guid: f879aaf3eeb0c467eb22cbaf08dc97a4,
+    type: 2}
 --- !u!114 &114788272997075196
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -624,7 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetRenderTexture: {fileID: 8400000, guid: 60bd05d5765dda34dae038b49175133b, type: 2}
-  shouldBlurRenderTexture: 1
+  shouldBlurRenderTexture: 0
   defaultTexture: {fileID: 2800000, guid: c202fec7e299fde408aafc9b1b79332d, type: 3}
 --- !u!114 &114838109114313984
 MonoBehaviour:

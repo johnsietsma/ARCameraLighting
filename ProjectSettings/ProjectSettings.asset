@@ -12,7 +12,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Google
-  productName: ARCore Env Lighting
+  productName: ARKit Camera Skybox GI
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -151,7 +151,7 @@ PlayerSettings:
     Android: com.JohnSietsma.ARCoreEnvL
     Standalone: unity.DefaultCompany.TangoUnitySDK
     Tizen: com.Company.ProductName
-    iOS: com.JohnSietsma.ARScratch
+    iOS: com.JohnSietsma.ARKitSkyboxGI
     tvOS: com.Company.ProductName
   buildNumber:
     iOS: 0
@@ -309,10 +309,10 @@ PlayerSettings:
   wiiUProfilerLibPath: 
   playModeTestRunnerEnabled: 0
   actionOnDotNetUnhandledException: 1
-  enableInternalProfiler: 0
+  enableInternalProfiler: 1
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
+  cameraUsageDescription: Hi
   locationUsageDescription: 
   microphoneUsageDescription: 
   switchNetLibKey: 
