@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace UnityEngine.XR.iOS
 {
 	public class UnityARHitTestExample : MonoBehaviour
 	{
 		public Transform m_HitTransform;
+		public UnityEvent m_PlaneTapped;
 
         bool HitTestWithResultType (ARPoint point, ARHitTestResultType resultTypes)
         {
@@ -15,6 +17,7 @@ namespace UnityEngine.XR.iOS
                     Debug.Log ("Got hit!");
                     m_HitTransform.position = UnityARMatrixOps.GetPosition (hitResult.worldTransform);
                     m_HitTransform.rotation = UnityARMatrixOps.GetRotation (hitResult.worldTransform);
+					m_PlaneTapped.Invoke ();
                     Debug.Log (string.Format ("x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
                     return true;
                 }
@@ -37,6 +40,7 @@ namespace UnityEngine.XR.iOS
 
 					//and the rotation from the transform of the plane collider
 					m_HitTransform.rotation = hit.transform.rotation;
+					m_PlaneTapped.Invoke ();
 					return true;
 				}
 			}

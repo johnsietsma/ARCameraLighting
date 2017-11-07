@@ -122,12 +122,12 @@ Prefab:
     - target: {fileID: 224987449644035828, guid: f47bb0c89c44cb84b8c3600ac4a6d390,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 640
+      value: 777
       objectReference: {fileID: 0}
     - target: {fileID: 224987449644035828, guid: f47bb0c89c44cb84b8c3600ac4a6d390,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 400
+      value: 303
       objectReference: {fileID: 0}
     - target: {fileID: 224987449644035828, guid: f47bb0c89c44cb84b8c3600ac4a6d390,
         type: 2}
@@ -291,7 +291,25 @@ Prefab:
       propertyPath: planeTapped.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 1981717258309620, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676531596590114, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1695422019316642, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1781729947045224, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 92207406761493678, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
+    - {fileID: 124391094395962334, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &1024280196
