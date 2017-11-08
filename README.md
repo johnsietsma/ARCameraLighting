@@ -20,4 +20,4 @@ Tap on the screen to set the position of the objects in the world.
 ![Spheres](https://lh6.googleusercontent.com/BNdbudNcEno4SCr0IU_xvYUVa38MCkBT2MfSVuinXRLaTcSVnh3HKQUR6a7RqnBsGW9QdTNPiWVfIYc7H6I4=w2560-h1339-rw)
 
 
-![Kyle Walking](https://drive.google.com/uc?export=download&id=1O3NlZtLV0dtLNHBrX7igjCB5lqc7IyUQ)
+[Kyle Walking](https://drive.google.com/uc?export=download&id=1O3NlZtLV0dtLNHBrX7igjCB5lqc7IyUQ)
