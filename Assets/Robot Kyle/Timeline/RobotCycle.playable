@@ -248,7 +248,7 @@ MonoBehaviour:
     m_ClipIn: 0
     m_Asset: {fileID: 114558041098154852}
     m_UnderlyingAsset: {fileID: 7400002, guid: f1f60761d92275c44a2fb32533cbaa79, type: 3}
-    m_Duration: 3.35
+    m_Duration: 1.8333333333333333
     m_TimeScale: 1
     m_ParentTrack: {fileID: 114606020477752232}
     m_EaseInDuration: 0
@@ -257,19 +257,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 2
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-      - serializedVersion: 2
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4

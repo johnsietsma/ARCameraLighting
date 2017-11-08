@@ -13,25 +13,22 @@ public class EnvironmentalAmbientLight : MonoBehaviour
 	[Tooltip("How much to multiply the environmental light estimate by")]
     public float intensityMultiplier = 3;
 
-    [Tooltip("The EnvironmentalLight to get the estimation from. Can be null if the EnvironmentalLight is attached to the same GameObject")]
-    public EnvironmentalLightEx environmentalLight;
+	public ARCamera arCamera;
 
     private float lightEstimationSmoothVelocity; // For the smoothing
 
     void Start()
     {
-        if (environmentalLight == null)
+		if (arCamera == null)
         {
-            environmentalLight = GetComponent<EnvironmentalLightEx>();
+			arCamera = GetComponent<ARCamera>();
         }
-        Debug.Assert(environmentalLight, "An EnvironmentalLight is required");
+		Debug.Assert(arCamera, "An ARCamera is required");
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        RenderSettings.ambientIntensity = Mathf.SmoothDamp(RenderSettings.ambientIntensity, environmentalLight.colorScale * intensityMultiplier, ref lightEstimationSmoothVelocity, lightEstimationSmoothTime);
-
+		RenderSettings.ambientIntensity = Mathf.SmoothDamp(RenderSettings.ambientIntensity, arCamera.Camera.LightEstimation * intensityMultiplier, ref lightEstimationSmoothVelocity, lightEstimationSmoothTime);
     }
 }

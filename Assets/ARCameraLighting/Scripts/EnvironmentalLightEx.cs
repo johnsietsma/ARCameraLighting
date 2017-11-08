@@ -26,7 +26,6 @@ namespace GoogleARCore
     /// <summary>
     /// A component that automatically adjust lighting settings for the scene
     /// to be inline with those estimated by ARCore.
-    /// JPS: Added ability to change light estimation in the editor for testing purposes
     /// JPS: Added colorScale as a public variable.
     /// </summary>
     [ExecuteInEditMode]
