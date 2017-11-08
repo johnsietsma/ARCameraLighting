@@ -9,16 +9,22 @@ namespace UnityEngine.XR.iOS
 		public Transform m_HitTransform;
 		public UnityEvent m_PlaneTapped;
 
+		private string m_AnchorId;
+
         bool HitTestWithResultType (ARPoint point, ARHitTestResultType resultTypes)
         {
             List<ARHitTestResult> hitResults = UnityARSessionNativeInterface.GetARSessionNativeInterface ().HitTest (point, resultTypes);
             if (hitResults.Count > 0) {
                 foreach (var hitResult in hitResults) {
                     Debug.Log ("Got hit!");
+					if (!string.IsNullOrEmpty(this.m_AnchorId)) {
+						UnityARSessionNativeInterface.GetARSessionNativeInterface ().RemoveUserAnchor (this.m_AnchorId); 
+					}
                     m_HitTransform.position = UnityARMatrixOps.GetPosition (hitResult.worldTransform);
-                    m_HitTransform.rotation = UnityARMatrixOps.GetRotation (hitResult.worldTransform);
+					m_HitTransform.rotation = Quaternion.identity;// UnityARMatrixOps.GetRotation (hitResult.worldTransform);
 					FaceToward.SetFacing(m_HitTransform, Camera.main.transform.position);
 					m_PlaneTapped.Invoke ();
+					m_AnchorId = UnityARSessionNativeInterface.GetARSessionNativeInterface ().AddUserAnchorFromGameObject(m_HitTransform.gameObject).identifierStr; 
                     Debug.Log (string.Format ("x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
                     return true;
                 }
@@ -37,11 +43,11 @@ namespace UnityEngine.XR.iOS
 				if (Physics.Raycast (ray, out hit)) {
 					//we're going to get the position from the contact point
 					m_HitTransform.position = hit.point;
-                    FaceToward.SetFacing(m_HitTransform, Camera.main.transform.position);
                     Debug.Log (string.Format ("x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
 
 					//and the rotation from the transform of the plane collider
 					m_HitTransform.rotation = hit.transform.rotation;
+					FaceToward.SetFacing(m_HitTransform, Camera.main.transform.position);
 					m_PlaneTapped.Invoke ();
 					return true;
 				}
@@ -74,11 +80,11 @@ namespace UnityEngine.XR.iOS
 
                     // prioritize reults types
                     ARHitTestResultType[] resultTypes = {
-                        ARHitTestResultType.ARHitTestResultTypeExistingPlaneUsingExtent, 
+                        //ARHitTestResultType.ARHitTestResultTypeExistingPlaneUsingExtent, 
                         // if you want to use infinite planes use this:
-                        //ARHitTestResultType.ARHitTestResultTypeExistingPlane,
-                        ARHitTestResultType.ARHitTestResultTypeHorizontalPlane, 
-                        ARHitTestResultType.ARHitTestResultTypeFeaturePoint
+                        ARHitTestResultType.ARHitTestResultTypeExistingPlane,
+                        ARHitTestResultType.ARHitTestResultTypeHorizontalPlane
+                        //ARHitTestResultType.ARHitTestResultTypeFeaturePoint
                     }; 
 					
                     foreach (ARHitTestResultType resultType in resultTypes)
