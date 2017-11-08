@@ -36,7 +36,8 @@ namespace UnityEngine.XR.iOS
 				if (Physics.Raycast (ray, out hit)) {
 					//we're going to get the position from the contact point
 					m_HitTransform.position = hit.point;
-					Debug.Log (string.Format ("x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
+                    FaceToward.SetFacing(m_HitTransform, Camera.main.transform.position);
+                    Debug.Log (string.Format ("x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
 
 					//and the rotation from the transform of the plane collider
 					m_HitTransform.rotation = hit.transform.rotation;
@@ -46,6 +47,11 @@ namespace UnityEngine.XR.iOS
 			}
 			return false;
 		}
+
+		void Start()
+		{
+            FaceToward.SetFacing(m_HitTransform, Camera.main.transform.position);
+        }
 			
 		void Update () 
 		{

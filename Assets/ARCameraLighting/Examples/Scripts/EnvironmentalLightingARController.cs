@@ -17,7 +17,6 @@ public class EnvironmentalLightingARController : MonoBehaviour
 
     public UnityEvent planeTapped;
 
-
     private GoogleARCore.HelloAR.PlaneAttachment m_planeAttachment;
     private List<TrackedPlane> m_newPlanes = new List<TrackedPlane>();
     private List<TrackedPlane> m_allPlanes = new List<TrackedPlane>();
@@ -44,6 +43,8 @@ public class EnvironmentalLightingARController : MonoBehaviour
     public void Start()
     {
         m_planeAttachment = m_worldRoot.GetComponent<GoogleARCore.HelloAR.PlaneAttachment>();
+
+        FaceToward.SetFacing(m_worldRoot.transform, m_firstPersonCamera.transform.position);
     }
 
     public void Update()
@@ -96,6 +97,7 @@ public class EnvironmentalLightingARController : MonoBehaviour
             var anchor = Session.CreateAnchor(hit.Point, Quaternion.identity);
 
             m_worldRoot.transform.position = hit.Point;
+            FaceToward.SetFacing(m_worldRoot.transform, m_firstPersonCamera.transform.position);
             m_worldRoot.transform.parent = anchor.transform;
 
             // Andy should look at the camera but still be flush with the plane.

@@ -183,11 +183,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114697273832221310, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: m_PlaneTapped.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4077583497246882, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -235,45 +230,11 @@ Prefab:
       propertyPath: m_HitTransform
       value: 
       objectReference: {fileID: 1705311939}
-    - target: {fileID: 114160294398464826, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: arKitActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114160294398464826, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: arCoreActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1781729947045224, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114697273832221310, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: m_PlaneTapped.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114697273832221310, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: m_PlaneTapped.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 114697273832221310, guid: b1582f5587328e24c9d8b2c42a22a3ab,
         type: 2}
       propertyPath: m_PlaneTapped.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1544635190}
-    - target: {fileID: 114697273832221310, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: m_PlaneTapped.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ResetPosition
-      objectReference: {fileID: 0}
-    - target: {fileID: 114697273832221310, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
-      propertyPath: m_PlaneTapped.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
   m_IsPrefabParent: 0
