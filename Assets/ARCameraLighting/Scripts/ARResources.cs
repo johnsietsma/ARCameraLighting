@@ -14,12 +14,6 @@ public static class ARResources
 	#if UNITY_ANDROID && !UNITY_EDITOR
 	// ---- ARCore ----
 
-    // The Unity Camera being used to render the physical camera
-    public static Camera Camera
-    {
-       get { return Device.backgroundRenderer.camera; }
-    }
-
     // Is the AR session connected?
     public static bool IsConnected
     {
@@ -62,11 +56,6 @@ public static class ARResources
 #elif UNITY_IOS && !UNITY_EDITOR
 	// ---- ARKit ----
 
-	// The Unity Camera being used to render the physical camera
-	public static Camera Camera {
-		get { return Camera.main; } // TODO: Use ARCameraManager.m_camera;
-	}
-
 	// Is the AR session connected?
 	public static bool IsConnected {
 		get { return true; }
@@ -84,12 +73,6 @@ public static class ARResources
     // ---- Editor (for debugging) ----
 
     public static bool IsConnected { get { return true; } }
-
-
-    public static Camera Camera
-    {
-        get { return Camera.main; }
-    }
 
     public static Texture CameraTexture
     {

@@ -4,8 +4,11 @@ using UnityEngine.Rendering;
 
 #if UNITY_EDITOR
 
-public class AREditorCameraBlit : MonoBehaviour, IARCameraBlit 
+public class AREditorCamera : MonoBehaviour, IARCamera
 {
+	[Range(0,1)]
+	public float pixelIntensity = 0.5f;
+
 	public Texture defaultTexture;
 
 	private Material blitMat;
@@ -16,6 +19,10 @@ public class AREditorCameraBlit : MonoBehaviour, IARCameraBlit
 		blitMat = Resources.Load<Material>("Materials/ARCoreBlit");
 		Debug.Assert(blitMat);
 	}
+
+	public Camera Camera { get { return Camera.main; } }
+
+	public float LightEstimation { get { return pixelIntensity; } }
 
 	public void BlitCameraTexture( CommandBuffer commandBuffer, int destinationTextureID )
 	{
