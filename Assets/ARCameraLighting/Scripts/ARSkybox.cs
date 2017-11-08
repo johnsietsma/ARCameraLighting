@@ -34,6 +34,7 @@ public class ARSkybox : MonoBehaviour
 
     void Update()
     {
+        if (!ARResources.IsConnected) return;
         Debug.Assert(skyboxMaterial);
 
         // The skybox material requires the camera matrix for correct environment orientation

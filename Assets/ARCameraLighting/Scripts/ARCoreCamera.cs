@@ -1,13 +1,15 @@
-﻿using System;
+﻿using GoogleARCore;
+using GoogleAR.UnityNative;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 #if UNITY_ANDROID
 
-public class ARCoreCamera : MonoBehaviour, IARCameraBlit {
+public class ARCoreCamera : MonoBehaviour, IARCamera {
 
 	private Material blitMat;
-private EnvironmentalLightEX environmentalLight;
+	private EnvironmentalLightEx environmentalLight;
 
 	void Awake() 
 	{
@@ -15,7 +17,7 @@ private EnvironmentalLightEX environmentalLight;
 		blitMat = Resources.Load<Material>("Materials/ARCoreBlit");
 		Debug.Assert(blitMat);
 
-		environmentalLight = GetComponent<EnvironmentalLight>();
+		environmentalLight = GetComponent<EnvironmentalLightEx>();
 		Debug.Assert(environmentalLight);
 	}
 
@@ -25,7 +27,7 @@ private EnvironmentalLightEX environmentalLight;
 		blitMat.SetFloat("_ScreenOrientation", (float)Screen.orientation);
 	}
 
-	Camera Camera { get { Device.backgroundRenderer.camera; } }
+	public Camera Camera { get { return ARResources.IsConnected ? Device.backgroundRenderer.camera : null; } }
 
 	public float LightEstimation { get { return environmentalLight.colorScale; } }
 	
