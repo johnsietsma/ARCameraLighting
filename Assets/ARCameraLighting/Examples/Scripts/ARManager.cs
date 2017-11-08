@@ -7,8 +7,8 @@ public class ARManager : MonoBehaviour {
 	public GameObject arKitGameObject;
 	public GameObject arCoreGameObject;
 
-	public bool arKitActive = false;
-	public bool arCoreActive = false;
+	private bool arKitActive = false;
+	private bool arCoreActive = false;
 
 	void Awake () {
 		#if UNITY_IOS

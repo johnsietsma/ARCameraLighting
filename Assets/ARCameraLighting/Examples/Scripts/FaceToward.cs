@@ -8,6 +8,5 @@ public static class FaceToward
         var faceTarget = lookAt;
         faceTarget.y = 0;
         t.LookAt(faceTarget);
-        Debug.Log("Face: " + faceTarget);
     }
 }
