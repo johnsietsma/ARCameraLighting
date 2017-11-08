@@ -4,15 +4,15 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 13
-  productGUID: 1d1ee322a76b549319dbfbd6eb31ab35
+  productGUID: fc9ad044b39f1486ca963b5cca41bf88
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: John Sietsma
-  productName: AR Skybox
+  companyName: Google
+  productName: ARKit Camera Skybox GI
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -65,7 +65,7 @@ PlayerSettings:
   androidBlitType: 0
   defaultIsFullScreen: 1
   defaultIsNativeResolution: 1
-  macRetinaSupport: 1
+  macRetinaSupport: 0
   runInBackground: 0
   captureSingleScreen: 0
   muteOtherAudioSources: 0
@@ -73,7 +73,7 @@ PlayerSettings:
   Force IOS Speakers When Recording: 0
   submitAnalytics: 1
   usePlayerLog: 1
-  bakeCollisionMeshes: 0
+  bakeCollisionMeshes: 1
   forceSingleInstance: 0
   resizableWindow: 0
   useMacAppStoreValidation: 0
@@ -85,7 +85,7 @@ PlayerSettings:
   xboxEnableKinect: 0
   xboxEnableKinectAutoTracking: 0
   xboxEnableFitness: 0
-  visibleInBackground: 1
+  visibleInBackground: 0
   allowFullscreenSwitch: 1
   graphicsJobMode: 0
   macFullscreenMode: 2
@@ -136,24 +136,28 @@ PlayerSettings:
     daydream:
       depthFormat: 0
       useSustainedPerformanceMode: 0
-      enableVideoLayer: 0
+      enableVideoLayer: 1
       useProtectedVideoMemory: 0
     hololens:
       depthFormat: 1
   protectGraphicsMemory: 0
   useHDRDisplay: 0
   m_ColorGamuts: 00000000
-  targetPixelDensity: 0
+  targetPixelDensity: 30
   resolutionScalingMode: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.JohnSietsma.ARSky
-    iOS: com.JohnSietsma.ARSkyboxGI
-  buildNumber: {}
+    Android: com.JohnSietsma.ARCoreEnvL
+    Standalone: unity.DefaultCompany.TangoUnitySDK
+    Tizen: com.Company.ProductName
+    iOS: com.JohnSietsma.ARKitSkyboxGI
+    tvOS: com.Company.ProductName
+  buildNumber:
+    iOS: 0
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 24
-  AndroidTargetSdkVersion: 0
+  AndroidTargetSdkVersion: 25
   AndroidPreferredInstallLocation: 1
   aotOptions: 
   stripEngineCode: 1
@@ -217,8 +221,8 @@ PlayerSettings:
   iOSMetalForceHardShadows: 0
   metalEditorSupport: 0
   metalAPIValidation: 1
-  iOSRenderExtraFrameOnPause: 0
-  appleDeveloperTeamID: 
+  iOSRenderExtraFrameOnPause: 1
+  appleDeveloperTeamID: John Sietsma
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
   appleEnableAutomaticSigning: 0
@@ -227,10 +231,10 @@ PlayerSettings:
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: 
   AndroidKeyaliasName: 
-  AndroidTVCompatibility: 0
-  AndroidIsGame: 0
+  AndroidTVCompatibility: 1
+  AndroidIsGame: 1
   AndroidEnableTango: 1
-  androidEnableBanner: 1
+  androidEnableBanner: 0
   androidUseLowAccuracyLocation: 0
   m_AndroidBanners:
   - width: 320
@@ -238,16 +242,51 @@ PlayerSettings:
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
   resolutionDialogBanner: {fileID: 0}
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: Android
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 067075c98c3db4c7d9ba9b50cba2f57e, type: 3}
+      m_Width: 192
+      m_Height: 192
+      m_Kind: 0
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 144
+      m_Height: 144
+      m_Kind: 0
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 96
+      m_Height: 96
+      m_Kind: 0
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 72
+      m_Height: 72
+      m_Kind: 0
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 48
+      m_Height: 48
+      m_Kind: 0
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 36
+      m_Height: 36
+      m_Kind: 0
   m_BuildTargetBatching: []
   m_BuildTargetGraphicsAPIs: []
-  m_BuildTargetVRSettings: []
+  m_BuildTargetVRSettings:
+  - m_BuildTarget: Android
+    m_Enabled: 0
+    m_Devices:
+    - daydream
   m_BuildTargetEnableVuforiaSettings: []
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   m_TemplateCustomTags: {}
   mobileMTRendering:
-    Android: 1
     iPhone: 1
     tvOS: 1
   wiiUTitleID: 0005000011000000
@@ -270,10 +309,10 @@ PlayerSettings:
   wiiUProfilerLibPath: 
   playModeTestRunnerEnabled: 0
   actionOnDotNetUnhandledException: 1
-  enableInternalProfiler: 0
+  enableInternalProfiler: 1
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: ARSCRATCH
+  cameraUsageDescription: Hi
   locationUsageDescription: 
   microphoneUsageDescription: 
   switchNetLibKey: 
@@ -282,7 +321,7 @@ PlayerSettings:
   switchSocketConcurrencyLimit: 14
   switchScreenResolutionBehavior: 2
   switchUseCPUProfiler: 0
-  switchApplicationID: 0x01004b9000490000
+  switchApplicationID: 0x0005000C10000001
   switchNSODependencies: 
   switchTitleNames_0: 
   switchTitleNames_1: 
@@ -336,7 +375,7 @@ PlayerSettings:
   switchAccessibleURLs: 
   switchLegalInformation: 
   switchMainThreadStackSize: 1048576
-  switchPresenceGroupId: 
+  switchPresenceGroupId: 0x0005000C10000001
   switchLogoHandling: 0
   switchReleaseVersion: 0
   switchDisplayVersion: 1.0.0
@@ -348,8 +387,8 @@ PlayerSettings:
   switchUserAccountSaveDataSize: 0
   switchUserAccountSaveDataJournalSize: 0
   switchApplicationAttribute: 0
-  switchCardSpecSize: -1
-  switchCardSpecClock: -1
+  switchCardSpecSize: 4
+  switchCardSpecClock: 25
   switchRatingsMask: 0
   switchRatingsInt_0: 0
   switchRatingsInt_1: 0
@@ -363,7 +402,7 @@ PlayerSettings:
   switchRatingsInt_9: 0
   switchRatingsInt_10: 0
   switchRatingsInt_11: 0
-  switchLocalCommunicationIds_0: 
+  switchLocalCommunicationIds_0: 0x0005000C10000001
   switchLocalCommunicationIds_1: 
   switchLocalCommunicationIds_2: 
   switchLocalCommunicationIds_3: 
@@ -389,7 +428,7 @@ PlayerSettings:
   ps4NPAgeRating: 12
   ps4NPTitleSecret: 
   ps4NPTrophyPackPath: 
-  ps4ParentalLevel: 11
+  ps4ParentalLevel: 1
   ps4ContentID: ED1633-NPXX51362_00-0000000000000000
   ps4Category: 0
   ps4MasterVersion: 01.00
@@ -399,7 +438,7 @@ PlayerSettings:
   ps4VideoOutPixelFormat: 0
   ps4VideoOutInitialWidth: 1920
   ps4VideoOutBaseModeInitialWidth: 1920
-  ps4VideoOutReprojectionRate: 60
+  ps4VideoOutReprojectionRate: 120
   ps4PronunciationXMLPath: 
   ps4PronunciationSIGPath: 
   ps4BackgroundImagePath: 
@@ -422,7 +461,7 @@ PlayerSettings:
   ps4DownloadDataSize: 0
   ps4GarlicHeapSize: 2048
   ps4ProGarlicHeapSize: 2560
-  ps4Passcode: mDzYC5OpkOMawQSo9ZHPHpXN6AZXvJMH
+  ps4Passcode: 5PN2qmWqBlQ9wQj99nsQzldVI5ZuGXbE
   ps4pnSessions: 1
   ps4pnPresence: 1
   ps4pnFriends: 1
@@ -433,7 +472,7 @@ PlayerSettings:
   ps4ReprojectionSupport: 0
   ps4UseAudio3dBackend: 0
   ps4SocialScreenEnabled: 0
-  ps4ScriptOptimizationLevel: 0
+  ps4ScriptOptimizationLevel: 3
   ps4Audio3dVirtualSpeakerCount: 14
   ps4attribCpuUsage: 0
   ps4PatchPkgPath: 
@@ -468,7 +507,7 @@ PlayerSettings:
   psp2LiveAreaTrialPath: 
   psp2PatchChangeInfoPath: 
   psp2PatchOriginalPackage: 
-  psp2PackagePassword: dbQy9ekdfXorDIofsU6kEqmWwhLoXHK4
+  psp2PackagePassword: WRK5RhRXdCdG5nG5azdNMK66MuCV6GXi
   psp2KeystoneFile: 
   psp2MemoryExpansionMode: 0
   psp2DRMType: 0
@@ -515,23 +554,28 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols: {}
-  platformArchitecture: {}
+  platformArchitecture:
+    iOS: 2
   scriptingBackend:
     Android: 0
-  incrementalIl2cppBuild: {}
+    WebPlayer: 0
+    iOS: 1
+  incrementalIl2cppBuild:
+    iOS: 1
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 0
-  apiCompatibilityLevelPerPlatform: {}
+  apiCompatibilityLevelPerPlatform:
+    Android: 2
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: ARScratch
+  metroPackageName: TangoUnitySDK
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: ARScratch
+  metroApplicationDescription: TangoUnitySDK
   wsaImages: {}
   metroTileShortName: 
   metroCommandLineArgsFile: 
@@ -540,11 +584,11 @@ PlayerSettings:
   metroLargeTileShowName: 0
   metroWideTileShowName: 0
   metroDefaultTileSize: 1
-  metroTileForegroundText: 2
+  metroTileForegroundText: 1
   metroTileBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628, a: 0}
-  metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628,
+  metroSplashScreenBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628,
     a: 1}
-  metroSplashScreenUseBackgroundColor: 0
+  metroSplashScreenUseBackgroundColor: 1
   platformCapabilities: {}
   metroFTAName: 
   metroFTAFileTypes: []
@@ -603,7 +647,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
-  facebookSdkVersion: 7.9.4
+  facebookSdkVersion: 7.9.1
   apiCompatibilityLevel: 2
   cloudProjectId: 
   projectName: 
