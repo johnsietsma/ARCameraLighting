@@ -9,7 +9,7 @@ Requres a light probe in the scene.
 Optionally uses relfection probes for environmental reflection
 
 - Direct Lighting
-Uses the sphereical environment map as a final color modifier in a custom shader.
+Uses the spherical environment map as a final color modifier in a custom shader.
 
 
 ## Usage
