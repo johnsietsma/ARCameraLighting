@@ -24,6 +24,7 @@
 	float2 SphereMapUVCoords( float3 viewDir, float3 normal )
 	{
 		// Sphere mapping. Find reflection and tranform into UV coords.
+		// Heavily inspired by https://www.clicktorelease.com/blog/creating-spherical-environment-mapping-shader/
 		float3 reflection = reflect(viewDir, normal);
 		float m = 2. * sqrt(
 			pow(reflection.x, 2.) +
