@@ -2,26 +2,34 @@
 
 public class ARCamera : MonoBehaviour {
 
-	public IARCamera Camera { get; private set; }
+	public IARCamera Camera {
+        get
+        {
+            if (arCamera == null) SetARCamera();
+            return arCamera;
+        }
+    }
 
-	// For debugging, use this texture in editor instead of the camera feed
-	public Texture defaultTexture;
+    // For debugging, use this texture in editor instead of the camera feed
+    public Texture defaultTexture;
 
-	void Awake()
+    private IARCamera arCamera;
+
+    private void SetARCamera()
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		Camera = gameObject.AddComponent<ARCoreCamera>();
+		arCamera = gameObject.AddComponent<ARCoreCamera>();
 #elif UNITY_IOS && !UNITY_EDITOR
 		ARKitCamera arkitCamera = gameObject.AddComponent<ARKitCamera>();
 		var arVideo = UnityEngine.Camera.main.GetComponent<UnityEngine.XR.iOS.UnityARVideo>();
 		Debug.Assert(arVideo);
 		arkitCamera.clearMaterial = arVideo.m_ClearMaterial;
-		Camera = arkitCamera;
+		arCamera = arkitCamera;
 #else
-AREditorCamera editorCamera = gameObject.AddComponent<AREditorCamera> ();
+        AREditorCamera editorCamera = gameObject.AddComponent<AREditorCamera> ();
 		editorCamera.defaultTexture = defaultTexture;
-		Camera = editorCamera;
+		arCamera = editorCamera;
 #endif
-		Debug.Assert(Camera!=null);
+        Debug.Assert(arCamera!=null);
 	}
 }

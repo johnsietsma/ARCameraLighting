@@ -13,22 +13,22 @@ public class AREditorCamera : MonoBehaviour, IARCamera
 
 	private Material blitMat;
 
-	void Awake() 
-	{
-		// Load up the material that does the blit.
-		blitMat = Resources.Load<Material>("Materials/ARCoreBlit");
-		Debug.Assert(blitMat);
-	}
-
 	public Camera Camera { get { return Camera.main; } }
 
 	public float LightEstimation { get { return pixelIntensity; } }
 
 	public void BlitCameraTexture( CommandBuffer commandBuffer, int destinationTextureID )
 	{
-        Debug.Assert(blitMat);
+        if( blitMat==null ) LoadBlitMat();
         commandBuffer.Blit(defaultTexture, destinationTextureID, blitMat);
 	}
+
+    private void LoadBlitMat()
+    {
+        // Load up the material that does the blit.
+        blitMat = Resources.Load<Material>("Materials/ARCoreBlit");
+        Debug.Assert(blitMat);
+    }
 }
 
 #endif

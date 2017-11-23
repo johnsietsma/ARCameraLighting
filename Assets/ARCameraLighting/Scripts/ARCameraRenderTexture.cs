@@ -45,6 +45,7 @@ public class ARCameraRenderTexture : MonoBehaviour
     {
 		IARCamera arCamera = GetComponent<ARCamera>().Camera;
 		Debug.Assert (arCamera!=null);
+		Debug.Assert (arCamera.Camera!=null);
 
         int renderTextureWidth = targetRenderTexture.width;
         int renderTextureHeight = targetRenderTexture.height;
