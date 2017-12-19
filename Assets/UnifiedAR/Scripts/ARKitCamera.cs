@@ -9,8 +9,6 @@ public class ARKitCamera : MonoBehaviour, IARCamera
 {
 	public Material clearMaterial;
 
-	public Camera Camera { get { return Camera.main; } } // TODO: Use ARCameraManager.m_camera;
-
 	public float LightEstimation { get; private set; }
 
 	public void BlitCameraTexture( CommandBuffer commandBuffer, int destinationTextureID )

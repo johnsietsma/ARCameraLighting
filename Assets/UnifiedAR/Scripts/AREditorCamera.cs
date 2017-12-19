@@ -13,15 +13,6 @@ public class AREditorCamera : MonoBehaviour, IARCamera
 
     private Material blitMat;
 
-    public Camera Camera
-    {
-        get
-        {
-            Debug.Assert(Camera.main != null, "You must have a Camera tagged as MainCamera in your scene.");
-            return Camera.main;
-        }
-    }
-
     public float LightEstimation { get { return pixelIntensity; } }
 
     public void BlitCameraTexture(CommandBuffer commandBuffer, int destinationTextureID)

@@ -16,7 +16,6 @@ namespace UnityEngine.XR.iOS
             List<ARHitTestResult> hitResults = UnityARSessionNativeInterface.GetARSessionNativeInterface ().HitTest (point, resultTypes);
             if (hitResults.Count > 0) {
                 foreach (var hitResult in hitResults) {
-                    Debug.Log ("Got hit!");
 					if (!string.IsNullOrEmpty(this.m_AnchorId)) {
 						UnityARSessionNativeInterface.GetARSessionNativeInterface ().RemoveUserAnchor (this.m_AnchorId); 
 					}

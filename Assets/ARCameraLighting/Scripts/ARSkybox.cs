@@ -11,14 +11,15 @@ public class ARSkybox : MonoBehaviour
     private static readonly int WORLD_TO_CAMERA_MATRIX_PROP_ID = Shader.PropertyToID("_WorldToCameraMatrix");
 
     private Material skyboxMaterial;
-    private ARCamera arCamera;
+    private Camera arCamera;
 
     void Start()
     {
         skyboxMaterial = Resources.Load<Material>("Materials/ARSkybox");
         Debug.Assert(skyboxMaterial);
 
-		arCamera = GetComponent<ARCamera>();
+        Debug.Assert(Camera.main != null, "You must have a Camera tagged as MainCamera in your scene.");
+        arCamera = Camera.main;
         RenderSettings.skybox = skyboxMaterial;
     }
 
@@ -38,6 +39,6 @@ public class ARSkybox : MonoBehaviour
         Debug.Assert(skyboxMaterial);
 
         // The skybox material requires the camera matrix for correct environment orientation
-		skyboxMaterial.SetMatrix(WORLD_TO_CAMERA_MATRIX_PROP_ID, arCamera.Camera.Camera.worldToCameraMatrix);
+		skyboxMaterial.SetMatrix(WORLD_TO_CAMERA_MATRIX_PROP_ID, arCamera.worldToCameraMatrix);
     }
 }

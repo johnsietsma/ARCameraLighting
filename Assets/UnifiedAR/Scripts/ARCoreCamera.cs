@@ -1,5 +1,4 @@
 ﻿using GoogleARCore;
-using GoogleAR.UnityNative;
 using System;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -26,8 +25,6 @@ public class ARCoreCamera : MonoBehaviour, IARCamera {
 		// TODO: Required?
 		blitMat.SetFloat("_ScreenOrientation", (float)Screen.orientation);
 	}
-
-	public Camera Camera { get { return ARResources.IsConnected ? Device.backgroundRenderer.camera : null; } }
 
 	public float LightEstimation { get { return environmentalLight.colorScale; } }
 	

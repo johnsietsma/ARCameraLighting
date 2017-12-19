@@ -43,9 +43,11 @@ public class ARCameraRenderTexture : MonoBehaviour
 
     private void SetupBackgroundBlit()
     {
-		IARCamera arCamera = GetComponent<ARCamera>().Camera;
+        Debug.Assert(Camera.main != null, "You must have a Camera tagged as MainCamera in your scene.");
+        Camera mainCamera = Camera.main;
+
+        IARCamera arCamera = GetComponent<ARCamera>().Camera;
 		Debug.Assert (arCamera!=null);
-		Debug.Assert (arCamera.Camera!=null);
 
         int renderTextureWidth = targetRenderTexture.width;
         int renderTextureHeight = targetRenderTexture.height;
@@ -53,9 +55,8 @@ public class ARCameraRenderTexture : MonoBehaviour
         // Clean up any previous command buffer and events hooks
         if (m_blitCommandBuffer != null)
         {
-            ARResources.DeregisterChangeCallback(SetupBackgroundBlit);
-			arCamera.Camera.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque, m_blitCommandBuffer);
-            arCamera.Camera.RemoveCommandBuffer(CameraEvent.AfterSkybox, m_releaseCommandBuffer);
+			mainCamera.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque, m_blitCommandBuffer);
+            mainCamera.RemoveCommandBuffer(CameraEvent.AfterSkybox, m_releaseCommandBuffer);
         }
 
         // Create the blit command buffer
@@ -77,18 +78,15 @@ public class ARCameraRenderTexture : MonoBehaviour
         m_blitCommandBuffer.Blit(workingRenderTextureID, targetRenderTexture, blendMaterial);
 
         // Run the command buffer just before opaque rendering
-        arCamera.Camera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_blitCommandBuffer);
+        mainCamera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_blitCommandBuffer);
 
         // Cleanup the temp render textures
         m_releaseCommandBuffer = new CommandBuffer();
         m_releaseCommandBuffer.name = "Release ARBackground";
         m_releaseCommandBuffer.ReleaseTemporaryRT(workingRenderTextureID);
-        arCamera.Camera.AddCommandBuffer(CameraEvent.AfterSkybox, m_releaseCommandBuffer);
+        mainCamera.AddCommandBuffer(CameraEvent.AfterSkybox, m_releaseCommandBuffer);
 
         isCapturing = true;
-
-        // Rebuild the command buffer if anything changes
-        ARResources.RegisterChangeCallback(SetupBackgroundBlit);
     }
 
 
