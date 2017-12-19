@@ -16,10 +16,6 @@ ARKit uses a YCrCb image format with multiple buffers. The shaders reconstructs 
 
 The lighting is an appoximation, so we blur the camera blur to avoid bright, flickering highlights.
 
-3. Blend the Result
-
-As the user is moving the phone around the camera background can change quickly, causing flickering lighting. We blend each camera frame into an existing buffer so that the frames are smoothed over time.
-
 4. Lighting
 
 The background is wrapped around the scene much like a MatCap or spherical environment map. This is not strictly accurate as the camera edges are wrapped around to the front of the object, but gives a "good enough" result in most AR scenes.

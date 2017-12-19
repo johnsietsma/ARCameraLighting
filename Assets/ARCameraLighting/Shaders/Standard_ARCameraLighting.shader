@@ -7,6 +7,7 @@
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 		_LightingStrength("Lighting Strength", Float) = 0.5
+		_LightingTex("Lighting Tex", 2D) = "white" {}
     }
 
     SubShader 
@@ -23,7 +24,7 @@
 		half _Glossiness;
 		half _Metallic;
 
-		sampler2D _ARCameraRenderTexture;
+		sampler2D _LightingTex;
 		float _LightingStrength;
 		fixed _GlobalLightEstimation;
 
@@ -34,7 +35,6 @@
 			float3 worldNormal;
         };
 
-		#include "ARCameraLighting.cginc"
 		#include "Lighting.cginc"
 		#include "UnityPBSLighting.cginc"
 
@@ -55,7 +55,7 @@
 		{
 			float2 texcoord = SphereMapUVCoords(viewDir, normal);
 			texcoord = 1 - texcoord;
-			return tex2D(_ARCameraRenderTexture, texcoord);
+			return tex2D(_LightingTex, texcoord);
 		}
 
 		void ARCameraFinalColorStandard(Input IN, SurfaceOutputStandard o, inout fixed4 color)

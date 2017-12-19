@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.5019536, g: 0.5019536, b: 0.5019536, a: 1}
+  m_IndirectSpecularColor: {r: 0.56466955, g: 0.57857025, b: 0.554624, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -171,24 +171,6 @@ Transform:
   m_Father: {fileID: 471200387}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &753948239 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1695422019316642, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 1366941862}
---- !u!114 &753948241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 753948239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4ca0c6a3af6b4635b7e98c6ea0a0cf9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SessionConfig: {fileID: 11400000, guid: 9586a84d6c32f46b6ab7aeb6042f160d, type: 2}
-  ConnectOnAwake: 1
 --- !u!1001 &1035358887
 Prefab:
   m_ObjectHideFlags: 0
@@ -284,11 +266,6 @@ Prefab:
       objectReference: {fileID: 1544635190}
     - target: {fileID: 114906785935455936, guid: b1582f5587328e24c9d8b2c42a22a3ab,
         type: 2}
-      propertyPath: FirstPersonCamera
-      value: 
-      objectReference: {fileID: 1829066354}
-    - target: {fileID: 114906785935455936, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-        type: 2}
       propertyPath: WorldRoot
       value: 
       objectReference: {fileID: 1705311937}
@@ -297,14 +274,6 @@ Prefab:
       propertyPath: planeTapped.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1544635190}
-    - target: {fileID: 1329554377725888, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
-      propertyPath: m_TagString
-      value: MainCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 1676531596590114, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b1582f5587328e24c9d8b2c42a22a3ab, type: 2}
   m_IsPrefabParent: 0
@@ -369,11 +338,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4051501375263264, guid: 3fc54acd10c8eb7488324f9c82781408,
     type: 2}
   m_PrefabInternal: {fileID: 1035358887}
---- !u!20 &1829066354 stripped
-Camera:
-  m_PrefabParentObject: {fileID: 20375849643136060, guid: b1582f5587328e24c9d8b2c42a22a3ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 1366941862}
 --- !u!1 &1974531836
 GameObject:
   m_ObjectHideFlags: 0

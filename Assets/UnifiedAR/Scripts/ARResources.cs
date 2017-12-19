@@ -10,7 +10,7 @@ using UnityEngine;
  */
 public static class ARResources
 {
-#if UNITY_ANDROID && UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
     // ---- ARCore ----
 
     // Is the AR session connected?

@@ -1,5 +1,10 @@
 ﻿Shader "Skybox/ARSkybox"
 {
+	Properties
+	{
+		_LightingTex("Lighting Tex", 2D) = "white" {}
+	}
+
 	CGINCLUDE
 
 	#include "UnityCG.cginc"
@@ -18,7 +23,7 @@
 	};
 
 	// This relies on a RenderTexture of this name being created in ARCoreCameraRenderTexture.cs.
-	sampler2D _ARCameraRenderTexture;
+	sampler2D _LightingTex;
 	float4x4 _WorldToCameraMatrix;
 
 	float2 SphereMapUVCoords( float3 viewDir, float3 normal )
@@ -54,7 +59,7 @@
 
 	fixed4 frag(v2f i) : COLOR
 	{
-		return tex2D(_ARCameraRenderTexture, i.texcoord);
+		return tex2D(_LightingTex, i.texcoord);
 	}
 
 	ENDCG

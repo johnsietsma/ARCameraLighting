@@ -42,7 +42,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1285083027269424
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 114000860925295230}
   m_Layer: 0
   m_Name: ARCore Device
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1695422019316642
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,6 +188,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4327651188019980}
+  - component: {fileID: 114317285623517792}
   m_Layer: 0
   m_Name: ARCore
   m_TagString: Untagged
@@ -642,6 +643,19 @@ MonoBehaviour:
   lightEstimationSmoothTime: 0.5
   intensityMultiplier: 2
   arCamera: {fileID: 0}
+--- !u!114 &114317285623517792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1695422019316642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ca0c6a3af6b4635b7e98c6ea0a0cf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SessionConfig: {fileID: 11400000, guid: 9586a84d6c32f46b6ab7aeb6042f160d, type: 2}
+  ConnectOnAwake: 1
 --- !u!114 &114360025673643258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -750,7 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cd4caf5e614ac048b692adac5ee21b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FirstPersonCamera: {fileID: 0}
+  FirstPersonCamera: {fileID: 20375849643136060}
   WorldRoot: {fileID: 0}
   planeTapped:
     m_PersistentCalls:

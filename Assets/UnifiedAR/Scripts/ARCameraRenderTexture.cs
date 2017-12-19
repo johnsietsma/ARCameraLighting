@@ -22,15 +22,11 @@ public class ARCameraRenderTexture : MonoBehaviour
     private CommandBuffer m_blitCommandBuffer;
     private CommandBuffer m_releaseCommandBuffer;
     private FastBlur fastBlur;
-    private Material blendMaterial = null;
     private bool isCapturing;
 
     IEnumerator Start()
     {
         Debug.Assert(targetRenderTexture, "Please assign a target RenderTexture");
-
-        blendMaterial = Resources.Load<Material>("Materials/Blend");
-        Debug.Assert(blendMaterial);
 
         // Wait for the AR session to start
         while (!ARResources.IsConnected)
@@ -45,6 +41,7 @@ public class ARCameraRenderTexture : MonoBehaviour
     {
         Debug.Assert(Camera.main != null, "You must have a Camera tagged as MainCamera in your scene.");
         Camera mainCamera = Camera.main;
+        Debug.Log("Main Camera is on GameObject - " + mainCamera.gameObject.name);
 
         IARCamera arCamera = GetComponent<ARCamera>().Camera;
 		Debug.Assert (arCamera!=null);
@@ -75,7 +72,7 @@ public class ARCameraRenderTexture : MonoBehaviour
         }
 
         // Copy over to the target texture. Use a blend texture to stop light flickering.
-        m_blitCommandBuffer.Blit(workingRenderTextureID, targetRenderTexture, blendMaterial);
+        m_blitCommandBuffer.Blit(workingRenderTextureID, targetRenderTexture);
 
         // Run the command buffer just before opaque rendering
         mainCamera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, m_blitCommandBuffer);
