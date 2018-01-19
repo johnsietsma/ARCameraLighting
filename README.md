@@ -30,6 +30,6 @@ The second uses the "finalcolor" function in a shader, so it requires a customer
 ## Usage
 Tap on the screen to set the position of the objects in the world.
 
-## Screenshots
+## Video
 
 [![Robot Kyle Walking](https://img.youtube.com/vi/qcICjAeqFZE/0.jpg)](https://youtu.be/qcICjAeqFZE)
