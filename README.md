@@ -14,17 +14,17 @@ ARKit uses a YCrCb image format with multiple buffers. The shaders reconstructs 
 
 2. Blur the Background
 
-The lighting is an appoximation, so we blur the camera blur to avoid bright, flickering highlights.
+The lighting is an approximation, so we blur the camera blur to avoid bright, flickering highlights.
 
 4. Lighting
 
 The background is wrapped around the scene much like a MatCap or spherical environment map. This is not strictly accurate as the camera edges are wrapped around to the front of the object, but gives a "good enough" result in most AR scenes.
 
-The shader calculates the reflectin vector and then converts that into a UV coordinate.
+The shader calculates the reflection vector and then converts that into a UV coordinate.
 
 There are two ways to light the scene. The first uses Unity's real-time GI system by combining a skybox with reflection and light probes in the scene. This works with any existing materials. The view direction must be corrected in the skybox shader to account for the pass for each skybox face.
 
-The second uses the "finalcolor" function in a shader, so it requires a customer shader. This methond is more performant.
+The second uses the "finalcolor" function in a shader, so it requires a customer shader. This method is more performant.
 
 
 ## Usage
