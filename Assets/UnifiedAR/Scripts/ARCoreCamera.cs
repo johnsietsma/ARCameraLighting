@@ -1,12 +1,11 @@
 ﻿using GoogleARCore;
-using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 #if UNITY_ANDROID
 
-public class ARCoreCamera : MonoBehaviour, IARCamera {
-
+public class ARCoreCamera : MonoBehaviour, IARCamera
+{
 	private Material blitMat;
 	private EnvironmentalLightEx environmentalLight;
 
@@ -22,15 +21,22 @@ public class ARCoreCamera : MonoBehaviour, IARCamera {
 
 	private void Update()
 	{
-		// TODO: Required?
-		blitMat.SetFloat("_ScreenOrientation", (float)Screen.orientation);
+	    const string topLeftRightVar = "_UvTopLeftRight";
+	    const string bottomLeftRightVar = "_UvBottomLeftRight";
+
+	    var uvQuad = Frame.CameraImage.DisplayUvCoords;
+	    blitMat.SetVector(topLeftRightVar,
+	        new Vector4(uvQuad.TopLeft.x, uvQuad.TopLeft.y, uvQuad.TopRight.x, uvQuad.TopRight.y));
+	    blitMat.SetVector(bottomLeftRightVar,
+	        new Vector4(uvQuad.BottomLeft.x, uvQuad.BottomLeft.y, uvQuad.BottomRight.x, uvQuad.BottomRight.y));
 	}
 
 	public float LightEstimation { get { return environmentalLight.colorScale; } }
 	
 	public void BlitCameraTexture( CommandBuffer commandBuffer, int destinationTextureID )
 	{
-		commandBuffer.Blit(ARResources.CameraTexture, destinationTextureID, blitMat);
+		commandBuffer.Blit(environmentalLight.testTex, destinationTextureID, blitMat);
+		//commandBuffer.Blit(Frame.CameraImage.Texture, destinationTextureID, blitMat);
 	}
 }
 

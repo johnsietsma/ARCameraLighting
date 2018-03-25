@@ -5,6 +5,7 @@ using UnityEngine;
 
 // Change the ambient light intensity based on the camera pixel intensity
 [RequireComponent(typeof(EnvironmentalLightEx))]
+[RequireComponent(typeof(ARCamera))]
 public class EnvironmentalAmbientLight : MonoBehaviour
 {
 	[Tooltip("The time taken to change to a new light estimate (in seconds)")]
@@ -13,18 +14,13 @@ public class EnvironmentalAmbientLight : MonoBehaviour
 	[Tooltip("How much to multiply the environmental light estimate by")]
     public float intensityMultiplier = 3;
 
-	public ARCamera arCamera;
+	private ARCamera arCamera;
 
     private float lightEstimationSmoothVelocity; // For the smoothing
 
     void Start()
     {
-		if (arCamera == null)
-        {
-			arCamera = GetComponent<ARCamera>();
-        }
-		Debug.Assert(arCamera, "An ARCamera is required");
-
+		arCamera = GetComponent<ARCamera>();
     }
 
     void Update()

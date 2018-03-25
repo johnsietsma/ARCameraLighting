@@ -4,24 +4,39 @@ using UnityEngine;
 
 public class ARManager : MonoBehaviour {
 
-	public GameObject arKitGameObject;
-	public GameObject arCoreGameObject;
-    public GameObject arEditorGameObject;
+	public GameObject arKitPrefab;
+	public GameObject arCorePrefab;
+    public GameObject arEditorPrefab;
 
-	private bool arKitActive = false;
-	private bool arCoreActive = false;
-    private bool arEditorActive = false;
+    public GameObject WorldRoot; // The object that will be moved onto the plane.
+
+    private GameObject arGameObject;
+    private Transform cameraTransform;
 
 	void Awake () {
+        GameObject arPrefab = null;
 #if UNITY_IOS && !UNITY_EDITOR
-		arKitActive = true;
+		arPrefab = arKitPrefab;
 #elif UNITY_ANDROID && !UNITY_EDITOR
-		arCoreActive = true;
+		arPrefab = arCorePrefab;
 #else
-        arEditorActive = true;
+        arPrefab = arEditorPrefab;
 #endif
-		arKitGameObject.SetActive (arKitActive);
-		arCoreGameObject.SetActive(arCoreActive);
-        arEditorGameObject.SetActive (arEditorActive);
+        arGameObject = Instantiate(arPrefab, Vector3.zero, Quaternion.identity, gameObject.transform);
+
+	    cameraTransform = Camera.main.transform;
 	}
+
+    private void PlaneHit(Transform hitTransform)
+    {
+        Debug.Log("Set facing");
+        WorldRoot.transform.position = hitTransform.position;
+        FaceToward.SetFacing(WorldRoot.transform, cameraTransform.position);
+        WorldRoot.transform.SetParent(hitTransform);
+
+        // Should look at the camera but still be flush with the plane.
+        WorldRoot.transform.LookAt(cameraTransform);
+        WorldRoot.transform.rotation = Quaternion.Euler(0.0f,
+            WorldRoot.transform.rotation.eulerAngles.y, WorldRoot.transform.rotation.z);
+    }
 }

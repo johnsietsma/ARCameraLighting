@@ -43,8 +43,7 @@ namespace UnityEngine.XR.iOS
 
 		void OnDestroy()
 		{
-			if(!bCommandBufferInitialized) return;
-            GetComponent<Camera>().RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque, m_VideoCommandBuffer);
+			GetComponent<Camera>().RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque, m_VideoCommandBuffer);
 			UnityARSessionNativeInterface.ARFrameUpdatedEvent -= UpdateFrame;
 			bCommandBufferInitialized = false;
 		}

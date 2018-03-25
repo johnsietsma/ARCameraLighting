@@ -7,35 +7,34 @@ using UnityEngine;
 [RequireComponent(typeof(ARCameraRenderTexture))]
 public class ARSkybox : MonoBehaviour
 {
-    // Shader property names
     private static readonly int WORLD_TO_CAMERA_MATRIX_PROP_ID = Shader.PropertyToID("_WorldToCameraMatrix");
 
     private Material skyboxMaterial;
+    private Material oldSkyboxMaterial;
     private Camera arCamera;
 
     void Start()
     {
-        skyboxMaterial = Resources.Load<Material>("Materials/ARSkybox");
-        Debug.Assert(skyboxMaterial);
-
         Debug.Assert(Camera.main != null, "You must have a Camera tagged as MainCamera in your scene.");
         arCamera = Camera.main;
-        RenderSettings.skybox = skyboxMaterial;
     }
 
     void OnEnable()
     {
+        skyboxMaterial = Resources.Load<Material>("Materials/ARSkybox");
+        Debug.Assert(skyboxMaterial);
+
+        oldSkyboxMaterial = RenderSettings.skybox;
         RenderSettings.skybox = skyboxMaterial;
     }
 
     void OnDisable()
     {
-        RenderSettings.skybox = null;
+        RenderSettings.skybox = oldSkyboxMaterial;
     }
 
     void Update()
     {
-        if (!ARResources.IsConnected) return;
         Debug.Assert(skyboxMaterial);
 
         // The skybox material requires the camera matrix for correct environment orientation

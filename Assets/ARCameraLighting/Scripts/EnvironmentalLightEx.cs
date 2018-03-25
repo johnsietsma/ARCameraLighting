@@ -31,8 +31,10 @@ namespace GoogleARCore
     [ExecuteInEditMode]
     public class EnvironmentalLightEx : MonoBehaviour
     {
+        public Texture testTex;
+
         [Range(0,1)]
-        public float pixelIntensity = 0.5f;
+        public float normalizedIntensity = 0.5f;
 
         [HideInInspector]
         public float colorScale;
@@ -43,30 +45,28 @@ namespace GoogleARCore
         /// </summary>
         public void Update()
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            if (!ARResources.IsConnected ) return;
-            pixelIntensity = Frame.LightEstimate.PixelIntensity;
-#endif
-
             // Use the following function to compute color scale:
             // * linear growth from (0.0, 0.0) to (1.0, LinearRampThreshold)
             // * slow growth from (1.0, LinearRampThreshold)
-            const float LinearRampThreshold = 0.8f;
-            const float MiddleGray = 0.18f;
-            const float Inclination = 0.4f;
+            const float linearRampThreshold = 0.8f;
+            const float middleGray = 0.18f;
+            const float inclination = 0.4f;
 
-            float normalizedIntensity = pixelIntensity / MiddleGray;
-            colorScale = 1.0f;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            normalizedIntensity = Frame.LightEstimate.PixelIntensity / middleGray;
+#endif
+
+            float colorScale = 1.0f;
 
             if (normalizedIntensity < 1.0f)
             {
-                colorScale = normalizedIntensity * LinearRampThreshold;
+                colorScale = normalizedIntensity * linearRampThreshold;
             }
             else
             {
-                float b = LinearRampThreshold / Inclination - 1.0f;
-                float a = (b + 1.0f) / b * LinearRampThreshold;
-                colorScale = a * (1.0f - (1.0f / (b * normalizedIntensity + 1.0f)));
+                float b = (linearRampThreshold / inclination) - 1.0f;
+                float a = (b + 1.0f) / b * linearRampThreshold;
+                colorScale = a * (1.0f - (1.0f / ((b * normalizedIntensity) + 1.0f)));
             }
 
             Shader.SetGlobalFloat("_GlobalLightEstimation", colorScale);

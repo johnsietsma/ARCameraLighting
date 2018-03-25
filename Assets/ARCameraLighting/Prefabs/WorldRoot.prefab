@@ -211,8 +211,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4051501375263264}
-  - component: {fileID: 114238556070761016}
-  - component: {fileID: 114524995005074536}
   m_Layer: 0
   m_Name: WorldRoot
   m_TagString: Untagged
@@ -345,7 +343,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4746855326951504}
   - component: {fileID: 95388038750587484}
-  - component: {fileID: 114921393198251082}
   m_Layer: 0
   m_Name: Robot Kyle
   m_TagString: Untagged
@@ -1157,39 +1154,6 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &114238556070761016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1388754447255340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f72ee472a4654c10a96aeb3fcf25bcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114524995005074536
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1388754447255340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d24244ceb54d42ca92481ba81c45056, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114921393198251082
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1809925107611062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8fe3cdec01fd34292e9cfdfb020403, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &135248678269513754
 SphereCollider:
   m_ObjectHideFlags: 1

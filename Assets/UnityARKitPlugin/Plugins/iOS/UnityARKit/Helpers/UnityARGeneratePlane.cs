@@ -16,10 +16,7 @@ namespace UnityEngine.XR.iOS
 
         void OnDestroy()
         {
-            if (unityARAnchorManager != null)
-            {
-                unityARAnchorManager.Destroy();
-            }
+            unityARAnchorManager.Destroy ();
         }
 
         void OnGUI()
