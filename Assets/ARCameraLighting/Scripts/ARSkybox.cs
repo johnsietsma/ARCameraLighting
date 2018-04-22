@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Renders the AR camera's RenderTexture as a skybox
-// This provides amnbient lighting(with light probes) and reflections (with reflection probes)
-[RequireComponent(typeof(ARCameraRenderTexture))]
+// Loads and updates the skybox material
 public class ARSkybox : MonoBehaviour
 {
     private static readonly int WORLD_TO_CAMERA_MATRIX_PROP_ID = Shader.PropertyToID("_WorldToCameraMatrix");

@@ -93,7 +93,7 @@ namespace UnityEngine.XR.iOS
 
 	};
 
-	#if !UNITY_EDITOR
+	#if !UNITY_EDITOR && UNITY_IOS
 	public class ARFaceGeometry
 	{
 		private UnityARFaceGeometry uFaceGeometry;

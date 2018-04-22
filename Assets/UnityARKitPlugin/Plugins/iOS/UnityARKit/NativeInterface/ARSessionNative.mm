@@ -46,7 +46,9 @@ typedef struct
     UnityARPlaneDetection planeDetection;
     uint32_t getPointCloudData;
     uint32_t enableLightEstimation;
-
+    uint32_t enableAutoFocus;
+    void *ptrVideoFormat;
+    char *arResourceGroup;
 } ARKitWorldTrackingSessionConfiguration;
 
 typedef struct
@@ -66,11 +68,25 @@ enum UnityARSessionRunOptions
 
 typedef struct
 {
+    NSUInteger vertexCount;
+    float *vertices;
+    NSUInteger textureCoordinateCount;
+    float *textureCoordinates;
+    NSUInteger triangleCount;
+    int *triangleIndices;
+    NSUInteger boundaryVertexCount;
+    float *boundaryVertices;
+} UnityARPlaneGeometry;
+
+
+typedef struct
+{
     void* identifier;
     UnityARMatrix4x4 transform;
     ARPlaneAnchorAlignment alignment;
     UnityARVector4 center;
     UnityARVector4 extent;
+    UnityARPlaneGeometry planeGeometry;
 } UnityARAnchorData;
 
 typedef struct
@@ -97,6 +113,15 @@ typedef struct
     void *blendShapes;  //NSDictionary<ARBlendShapeLocation, NSNumber*> *
 } UnityARFaceAnchorData;
 
+typedef struct
+{
+    void* identifier;
+    UnityARMatrix4x4 transform;
+    void* referenceImageName;
+    float referenceImageSize;
+} UnityARImageAnchorData;
+
+
 
 enum UnityARTrackingState
 {
@@ -111,6 +136,7 @@ enum UnityARTrackingReason
     UnityARTrackingStateReasonInitializing,
     UnityARTrackingStateReasonExcessiveMotion,
     UnityARTrackingStateReasonInsufficientFeatures,
+    UnityARTrackingStateReasonRelocalizing,
 };
 
 typedef struct
@@ -173,15 +199,25 @@ typedef struct
     BOOL bEnable;
 }UnityPixelBuffer;
 
+typedef struct
+{
+    void* ptrVideoFormat;
+    float imageResolutionWidth;
+    float imageResolutionHeight;
+    int framesPerSecond;
+}UnityARVideoFormat;
 
 
 typedef void (*UNITY_AR_FRAME_CALLBACK)(UnityARCamera camera);
 typedef void (*UNITY_AR_ANCHOR_CALLBACK)(UnityARAnchorData anchorData);
 typedef void (*UNITY_AR_USER_ANCHOR_CALLBACK)(UnityARUserAnchorData anchorData);
 typedef void (*UNITY_AR_FACE_ANCHOR_CALLBACK)(UnityARFaceAnchorData anchorData);
+typedef void (*UNITY_AR_IMAGE_ANCHOR_CALLBACK)(UnityARImageAnchorData anchorData);
 typedef void (*UNITY_AR_SESSION_FAILED_CALLBACK)(const void* error);
 typedef void (*UNITY_AR_SESSION_VOID_CALLBACK)(void);
+typedef bool (*UNITY_AR_SESSION_RELOCALIZE_CALLBACK)(void);
 typedef void (*UNITY_AR_SESSION_TRACKING_CHANGED)(UnityARCamera camera);
+typedef void (*UNITY_AR_VIDEOFORMAT_CALLBACK)(UnityARVideoFormat format);
 
 // These don't all need to be static data, but no other better place for them at the moment.
 static id <MTLTexture> s_CapturedImageTextureY;
@@ -196,6 +232,19 @@ static NSUInteger s_PointCloudSize;
 
 static float unityCameraNearZ;
 static float unityCameraFarZ;
+
+static inline bool UnityIsARKit_1_5_Supported()
+{
+    if ([ARImageAnchor class])
+    {
+        return true;
+    }
+    else
+    {
+        return  false;
+    }
+}
+
 
 static inline ARWorldAlignment GetARWorldAlignmentFromUnityARAlignment(UnityARAlignment& unityAlignment)
 {
@@ -217,6 +266,8 @@ static inline ARPlaneDetection GetARPlaneDetectionFromUnityARPlaneDetection(Unit
         ret |= ARPlaneDetectionNone;
     if ((planeDetection & UnityARPlaneDetectionHorizontal) != 0)
         ret |= ARPlaneDetectionHorizontal;
+    if ((planeDetection & UnityARPlaneDetectionVertical) != 0)
+        ret |= ARPlaneDetectionVertical;
     return ret;
 }
 
@@ -247,6 +298,8 @@ static inline UnityARTrackingReason GetUnityARTrackingReasonFromARTrackingReason
             return UnityARTrackingStateReasonExcessiveMotion;
         case ARTrackingStateReasonInsufficientFeatures:
             return UnityARTrackingStateReasonInsufficientFeatures;
+        case ARTrackingStateReasonRelocalizing:
+            return UnityARTrackingStateReasonRelocalizing;
         default:
             [NSException raise:@"UnrecognizedARTrackingStateReason" format:@"Unrecognized ARTrackingStateReason: %ld", (long)trackingReason];
             break;
@@ -268,6 +321,15 @@ inline void GetARSessionConfigurationFromARKitWorldTrackingSessionConfiguration(
     appleConfig.planeDetection = GetARPlaneDetectionFromUnityARPlaneDetection(unityConfig.planeDetection);
     appleConfig.worldAlignment = GetARWorldAlignmentFromUnityARAlignment(unityConfig.alignment);
     appleConfig.lightEstimationEnabled = (BOOL)unityConfig.enableLightEstimation;
+    
+    if (UnityIsARKit_1_5_Supported())
+    {
+        appleConfig.autoFocusEnabled = (BOOL) unityConfig.enableAutoFocus;
+        if (unityConfig.ptrVideoFormat != NULL)
+        {
+            appleConfig.videoFormat = (__bridge ARVideoFormat*) unityConfig.ptrVideoFormat;
+        }
+    }
 }
 
 inline void GetARSessionConfigurationFromARKitSessionConfiguration(ARKitSessionConfiguration& unityConfig, ARConfiguration* appleConfig)
@@ -309,6 +371,30 @@ inline void ARKitMatrixToUnityARMatrix4x4(const matrix_float4x4& matrixIn, Unity
     matrixOut->column3.w = c3.w;
 }
 
+inline void UnityARMatrix4x4ToARKitMatrix(const UnityARMatrix4x4& matrixIn, matrix_float4x4* matrixOut)
+{
+    matrixOut->columns[0].x = matrixIn.column0.x;
+    matrixOut->columns[0].y = matrixIn.column0.y;
+    matrixOut->columns[0].z = matrixIn.column0.z;
+    matrixOut->columns[0].w = matrixIn.column0.w;
+    
+    matrixOut->columns[1].x = matrixIn.column1.x;
+    matrixOut->columns[1].y = matrixIn.column1.y;
+    matrixOut->columns[1].z = matrixIn.column1.z;
+    matrixOut->columns[1].w = matrixIn.column1.w;
+    
+    matrixOut->columns[2].x = matrixIn.column2.x;
+    matrixOut->columns[2].y = matrixIn.column2.y;
+    matrixOut->columns[2].z = matrixIn.column2.z;
+    matrixOut->columns[2].w = matrixIn.column2.w;
+    
+    matrixOut->columns[3].x = matrixIn.column3.x;
+    matrixOut->columns[3].y = matrixIn.column3.y;
+    matrixOut->columns[3].z = matrixIn.column3.z;
+    matrixOut->columns[3].w = matrixIn.column3.w;
+    
+}
+
 
 static inline void GetUnityARCameraDataFromCamera(UnityARCamera& unityARCamera, ARCamera* camera, BOOL getPointCloudData)
 {
@@ -323,6 +409,19 @@ static inline void GetUnityARCameraDataFromCamera(UnityARCamera& unityARCamera, 
     unityARCamera.getPointCloudData = getPointCloudData;
 }
 
+inline void UnityARPlaneGeometryFromARPlaneGeometry(UnityARPlaneGeometry& planeGeometry, ARPlaneGeometry *arPlaneGeometry)
+{
+    planeGeometry.vertexCount = arPlaneGeometry.vertexCount;
+    planeGeometry.triangleCount = arPlaneGeometry.triangleCount;
+    planeGeometry.textureCoordinateCount = arPlaneGeometry.textureCoordinateCount;
+    planeGeometry.boundaryVertexCount = arPlaneGeometry.boundaryVertexCount;
+    planeGeometry.vertices = (float *) arPlaneGeometry.vertices;
+    planeGeometry.triangleIndices = (int *) arPlaneGeometry.triangleIndices;
+    planeGeometry.textureCoordinates = (float *) arPlaneGeometry.textureCoordinates;
+    planeGeometry.boundaryVertices = (float *) arPlaneGeometry.boundaryVertices;
+    
+}
+
 inline void UnityARAnchorDataFromARAnchorPtr(UnityARAnchorData& anchorData, ARPlaneAnchor* nativeAnchor)
 {
     anchorData.identifier = (void*)[nativeAnchor.identifier.UUIDString UTF8String];
@@ -334,6 +433,11 @@ inline void UnityARAnchorDataFromARAnchorPtr(UnityARAnchorData& anchorData, ARPl
     anchorData.extent.x = nativeAnchor.extent.x;
     anchorData.extent.y = nativeAnchor.extent.y;
     anchorData.extent.z = nativeAnchor.extent.z;
+    
+    if (UnityIsARKit_1_5_Supported())
+    {
+        UnityARPlaneGeometryFromARPlaneGeometry(anchorData.planeGeometry, nativeAnchor.geometry);
+    }
 }
 
 inline void UnityARMatrix4x4FromCGAffineTransform(UnityARMatrix4x4& outMatrix, CGAffineTransform displayTransform, BOOL isLandscape)
@@ -368,6 +472,7 @@ inline void UnityARUserAnchorDataFromARAnchorPtr(UnityARUserAnchorData& anchorDa
     ARKitMatrixToUnityARMatrix4x4(nativeAnchor.transform, &anchorData.transform);
 }
 
+
 #if ARKIT_USES_FACETRACKING
 inline void UnityARFaceGeometryFromARFaceGeometry(UnityARFaceGeometry& faceGeometry, ARFaceGeometry *arFaceGeometry)
 {
@@ -387,6 +492,14 @@ inline void UnityARFaceAnchorDataFromARFaceAnchorPtr(UnityARFaceAnchorData& anch
     anchorData.blendShapes = (__bridge void *) nativeAnchor.blendShapes;
 }
 #endif
+
+inline void UnityARImageAnchorDataFromARImageAnchorPtr(UnityARImageAnchorData& anchorData, ARImageAnchor* nativeAnchor)
+{
+    anchorData.identifier = (void*)[nativeAnchor.identifier.UUIDString UTF8String];
+    ARKitMatrixToUnityARMatrix4x4(nativeAnchor.transform, &anchorData.transform);
+    anchorData.referenceImageName = (void*)[nativeAnchor.referenceImage.name UTF8String];
+    anchorData.referenceImageSize = nativeAnchor.referenceImage.physicalSize.width;
+}
 
 inline void UnityLightDataFromARFrame(UnityLightData& lightData, ARFrame *arFrame)
 {
@@ -534,6 +647,40 @@ inline void UnityLightDataFromARFrame(UnityLightData& lightData, ARFrame *arFram
 
 @end
 
+@interface UnityARImageAnchorCallbackWrapper : NSObject <UnityARAnchorEventDispatcher>
+{
+@public
+    UNITY_AR_IMAGE_ANCHOR_CALLBACK _anchorAddedCallback;
+    UNITY_AR_IMAGE_ANCHOR_CALLBACK _anchorUpdatedCallback;
+    UNITY_AR_IMAGE_ANCHOR_CALLBACK _anchorRemovedCallback;
+}
+@end
+
+@implementation UnityARImageAnchorCallbackWrapper
+
+-(void)sendAnchorAddedEvent:(ARAnchor*)anchor
+{
+    UnityARImageAnchorData data;
+    UnityARImageAnchorDataFromARImageAnchorPtr(data, (ARImageAnchor*)anchor);
+    _anchorAddedCallback(data);
+}
+
+-(void)sendAnchorRemovedEvent:(ARAnchor*)anchor
+{
+    UnityARImageAnchorData data;
+    UnityARImageAnchorDataFromARImageAnchorPtr(data, (ARImageAnchor*)anchor);
+    _anchorRemovedCallback(data);
+}
+
+-(void)sendAnchorUpdatedEvent:(ARAnchor*)anchor
+{
+    UnityARImageAnchorData data;
+    UnityARImageAnchorDataFromARImageAnchorPtr(data, (ARImageAnchor*)anchor);
+    _anchorUpdatedCallback(data);
+}
+
+@end
+
 static UnityPixelBuffer s_UnityPixelBuffers;
 
 @interface UnityARSession : NSObject <ARSessionDelegate>
@@ -544,6 +691,7 @@ static UnityPixelBuffer s_UnityPixelBuffers;
     UNITY_AR_SESSION_FAILED_CALLBACK _arSessionFailedCallback;
     UNITY_AR_SESSION_VOID_CALLBACK _arSessionInterrupted;
     UNITY_AR_SESSION_VOID_CALLBACK _arSessionInterruptionEnded;
+    UNITY_AR_SESSION_RELOCALIZE_CALLBACK _arSessionShouldRelocalize;
     UNITY_AR_SESSION_TRACKING_CHANGED _arSessionTrackingChanged;
 
     NSMutableDictionary* _classToCallbackMap;
@@ -796,6 +944,15 @@ static CGAffineTransform s_CurAffineTransform;
     }
 }
 
+- (BOOL)sessionShouldAttemptRelocalization:(ARSession *)session
+{
+    if (_arSessionShouldRelocalize != NULL)
+    {
+        return _arSessionShouldRelocalize();
+    }
+    return NO;
+}
+
 - (void) sendAnchorRemovedEventToUnity:(NSArray<ARAnchor*>*)anchors
 {
     for (ARAnchor* anchorPtr in anchors)
@@ -833,6 +990,7 @@ extern "C" void session_SetSessionCallbacks(const void* session, UNITY_AR_FRAME_
                                             UNITY_AR_SESSION_FAILED_CALLBACK sessionFailed,
                                             UNITY_AR_SESSION_VOID_CALLBACK sessionInterrupted,
                                             UNITY_AR_SESSION_VOID_CALLBACK sessionInterruptionEnded,
+                                            UNITY_AR_SESSION_RELOCALIZE_CALLBACK sessionShouldRelocalize,
                                             UNITY_AR_SESSION_TRACKING_CHANGED trackingChanged)
 {
     UnityARSession* nativeSession = (__bridge UnityARSession*)session;
@@ -840,6 +998,7 @@ extern "C" void session_SetSessionCallbacks(const void* session, UNITY_AR_FRAME_
     nativeSession->_arSessionFailedCallback = sessionFailed;
     nativeSession->_arSessionInterrupted = sessionInterrupted;
     nativeSession->_arSessionInterruptionEnded = sessionInterruptionEnded;
+    nativeSession->_arSessionShouldRelocalize = sessionShouldRelocalize;
     nativeSession->_arSessionTrackingChanged = trackingChanged;
 }
 
@@ -881,6 +1040,21 @@ extern "C" void session_SetFaceAnchorCallbacks(const void* session, UNITY_AR_FAC
 #endif
 }
 
+extern "C" void session_SetImageAnchorCallbacks(const void* session, UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorAddedCallback,
+                                                UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorUpdatedCallback,
+                                                UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorRemovedCallback)
+{
+    if (UnityIsARKit_1_5_Supported())
+    {
+        UnityARSession* nativeSession = (__bridge UnityARSession*)session;
+        UnityARImageAnchorCallbackWrapper* imageAnchorCallbacks = [[UnityARImageAnchorCallbackWrapper alloc] init];
+        imageAnchorCallbacks->_anchorAddedCallback = imageAnchorAddedCallback;
+        imageAnchorCallbacks->_anchorUpdatedCallback = imageAnchorUpdatedCallback;
+        imageAnchorCallbacks->_anchorRemovedCallback = imageAnchorRemovedCallback;
+        [nativeSession->_classToCallbackMap setObject:imageAnchorCallbacks forKey:[ARImageAnchor class]];
+    }
+}
+
 extern "C" void StartWorldTrackingSessionWithOptions(void* nativeSession, ARKitWorldTrackingSessionConfiguration unityConfig, UnityARSessionRunOptions runOptions)
 {
     UnityARSession* session = (__bridge UnityARSession*)nativeSession;
@@ -889,6 +1063,14 @@ extern "C" void StartWorldTrackingSessionWithOptions(void* nativeSession, ARKitW
     GetARSessionConfigurationFromARKitWorldTrackingSessionConfiguration(unityConfig, config);
     session->_getPointCloudData = (BOOL) unityConfig.getPointCloudData;
     session->_getLightEstimation = (BOOL) unityConfig.enableLightEstimation;
+    
+    if(UnityIsARKit_1_5_Supported() && unityConfig.arResourceGroup != NULL && strlen(unityConfig.arResourceGroup) > 0)
+    {
+        NSString *strResourceGroup = [[NSString alloc] initWithUTF8String:unityConfig.arResourceGroup];
+        NSSet<ARReferenceImage *> *referenceImages = [ARReferenceImage referenceImagesInGroupNamed:strResourceGroup bundle:nil];
+        config.detectionImages = referenceImages;
+    }
+    
     [session->_session runWithConfiguration:config options:runOpts ];
     [session setupMetal];
 }
@@ -902,6 +1084,14 @@ extern "C" void StartWorldTrackingSession(void* nativeSession, ARKitWorldTrackin
     GetARSessionConfigurationFromARKitWorldTrackingSessionConfiguration(unityConfig, config);
     session->_getPointCloudData = (BOOL) unityConfig.getPointCloudData;
     session->_getLightEstimation = (BOOL) unityConfig.enableLightEstimation;
+    
+    if(UnityIsARKit_1_5_Supported() && unityConfig.arResourceGroup != NULL && strlen(unityConfig.arResourceGroup) > 0)
+    {
+        NSString *strResourceGroup = [[NSString alloc] initWithUTF8String:unityConfig.arResourceGroup];
+        NSSet<ARReferenceImage *> *referenceImages = [ARReferenceImage referenceImagesInGroupNamed:strResourceGroup bundle:nil];
+        config.detectionImages = referenceImages;
+    }
+    
     [session->_session runWithConfiguration:config];
     [session setupMetal];
 }
@@ -989,6 +1179,17 @@ extern "C" void SessionRemoveUserAnchor(void* nativeSession, const char * anchor
             [session->_session removeAnchor:a];
             return;
         }
+    }
+}
+
+extern "C" void SessionSetWorldOrigin(void* nativeSession, UnityARMatrix4x4 worldMatrix)
+{
+    if (UnityIsARKit_1_5_Supported())
+    {
+        UnityARSession* session = (__bridge UnityARSession*)nativeSession;
+        matrix_float4x4 arWorldMatrix;
+        UnityARMatrix4x4ToARKitMatrix(worldMatrix, &arWorldMatrix);
+        [session->_session setWorldOrigin:arWorldMatrix];
     }
 }
 
@@ -1105,6 +1306,27 @@ extern "C" bool IsARKitWorldTrackingSessionConfigurationSupported()
 extern "C" bool IsARKitSessionConfigurationSupported()
 {
     return AROrientationTrackingConfiguration.isSupported;
+}
+
+extern "C" void EnumerateVideoFormats(UNITY_AR_VIDEOFORMAT_CALLBACK videoFormatCallback)
+{
+    if (UnityIsARKit_1_5_Supported())
+    {
+        for(ARVideoFormat* arVideoFormat in ARWorldTrackingConfiguration.supportedVideoFormats)
+        {
+            UnityARVideoFormat videoFormat;
+            videoFormat.ptrVideoFormat = (__bridge void *)arVideoFormat;
+            videoFormat.imageResolutionWidth = arVideoFormat.imageResolution.width;
+            videoFormat.imageResolutionHeight = arVideoFormat.imageResolution.height;
+            videoFormat.framesPerSecond = arVideoFormat.framesPerSecond;
+            videoFormatCallback(videoFormat);
+        }
+    }
+}
+
+extern "C" bool Native_IsARKit_1_5_Supported()
+{
+    return UnityIsARKit_1_5_Supported();
 }
 
 extern "C" bool IsARKitFaceTrackingConfigurationSupported()

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking.PlayerConnection;
 using System.Text;
-using Utils; 
+using UnityEngine.XR.iOS.Utils; 
 
 #if UNITY_EDITOR
 
@@ -187,7 +187,7 @@ namespace UnityEngine.XR.iOS
 
 			serializableFromEditorMessage sfem = new serializableFromEditorMessage ();
 			sfem.subMessageId = SubMessageIds.editorInitARKitFaceTracking;
-			serializableARSessionConfiguration ssc = new serializableARSessionConfiguration (UnityARAlignment.UnityARAlignmentCamera, UnityARPlaneDetection.None, false, enableLightEstimation); 
+			serializableARSessionConfiguration ssc = new serializableARSessionConfiguration (UnityARAlignment.UnityARAlignmentCamera, UnityARPlaneDetection.None, false, enableLightEstimation, true); 
 			UnityARSessionRunOption roTracking = resetTracking ? UnityARSessionRunOption.ARSessionRunOptionResetTracking : 0;
 			UnityARSessionRunOption roAnchors = removeExistingAnchors ? UnityARSessionRunOption.ARSessionRunOptionRemoveExistingAnchors : 0;
 			sfem.arkitConfigMsg = new serializableARKitInit (ssc, roTracking | roAnchors);
