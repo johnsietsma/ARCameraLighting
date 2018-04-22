@@ -49,10 +49,10 @@ namespace GoogleARCore
             // * linear growth from (0.0, 0.0) to (1.0, LinearRampThreshold)
             // * slow growth from (1.0, LinearRampThreshold)
             const float linearRampThreshold = 0.8f;
-            const float middleGray = 0.18f;
             const float inclination = 0.4f;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+            const float middleGray = 0.18f;
             normalizedIntensity = Frame.LightEstimate.PixelIntensity / middleGray;
 #endif
 

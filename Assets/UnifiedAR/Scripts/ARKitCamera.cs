@@ -24,7 +24,7 @@ public class ARKitCamera : MonoBehaviour, IARCamera
 
 	void UpdateLightEstimation(UnityARCamera camera)
 	{
-		LightEstimation = camera.lightEstimation.ambientIntensity / 1000.0f;
+        LightEstimation = camera.lightData.arLightEstimate.ambientIntensity / 1000.0f;
 	}
 }
 
