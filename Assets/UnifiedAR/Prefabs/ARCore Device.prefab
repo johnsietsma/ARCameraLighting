@@ -189,12 +189,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f01603accd18024db6d19904c853660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FirstPersonCamera: {fileID: 20653771606765750}
   TrackedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
     type: 2}
-  WorldRoot: {fileID: 1388754447255340, guid: 3fc54acd10c8eb7488324f9c82781408, type: 2}
-  planeTapped:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null

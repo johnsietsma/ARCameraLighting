@@ -17,8 +17,6 @@ public class EnvironmentalLightingARController : MonoBehaviour
     /// </summary>
     public GameObject TrackedPlanePrefab;
 
-    public UnityEvent planeTapped; // Event to notify when the plane is tapped.
-
     /// <summary>
     /// A list to hold new planes ARCore began tracking in the current frame. This object is used across
     /// the application to avoid per-frame allocations.
@@ -84,8 +82,6 @@ public class EnvironmentalLightingARController : MonoBehaviour
             var anchor = hit.Trackable.CreateAnchor(hit.Pose);
 
             SendMessageUpwards("PlaneHit", anchor.transform);
-
-            planeTapped.Invoke();
         }
     }
 
