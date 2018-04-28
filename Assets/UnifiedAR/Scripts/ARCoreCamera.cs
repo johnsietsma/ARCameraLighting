@@ -35,8 +35,7 @@ public class ARCoreCamera : MonoBehaviour, IARCamera
 	
 	public void BlitCameraTexture( CommandBuffer commandBuffer, int destinationTextureID )
 	{
-		commandBuffer.Blit(environmentalLight.testTex, destinationTextureID, blitMat);
-		//commandBuffer.Blit(Frame.CameraImage.Texture, destinationTextureID, blitMat);
+		commandBuffer.Blit(Frame.CameraImage.Texture, destinationTextureID, blitMat);
 	}
 }
 

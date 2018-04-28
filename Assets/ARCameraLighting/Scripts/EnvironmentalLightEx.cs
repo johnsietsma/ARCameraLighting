@@ -31,8 +31,6 @@ namespace GoogleARCore
     [ExecuteInEditMode]
     public class EnvironmentalLightEx : MonoBehaviour
     {
-        public Texture testTex;
-
         [Range(0,1)]
         public float normalizedIntensity = 0.5f;
 
@@ -55,8 +53,6 @@ namespace GoogleARCore
             const float middleGray = 0.18f;
             normalizedIntensity = Frame.LightEstimate.PixelIntensity / middleGray;
 #endif
-
-            float colorScale = 1.0f;
 
             if (normalizedIntensity < 1.0f)
             {
