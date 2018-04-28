@@ -100,7 +100,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4051091731396212}
-  - component: {fileID: 114138507445906834}
+  - component: {fileID: 114679029585723220}
   m_Layer: 0
   m_Name: HitDetect
   m_TagString: Untagged
@@ -247,22 +247,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planePrefab: {fileID: 1372998203143648, guid: f879aaf3eeb0c467eb22cbaf08dc97a4,
     type: 2}
---- !u!114 &114138507445906834
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1552534285828442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6941ec02ead994c9b848d640887441f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HitTransform: {fileID: 0}
-  maxRayDistance: 30
-  collisionLayer:
-    serializedVersion: 2
-    m_Bits: 1024
 --- !u!114 &114554337345808362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -286,6 +270,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ClearMaterial: {fileID: 2100000, guid: f1d9352050a75486f878ab19fa578f16, type: 2}
+--- !u!114 &114679029585723220
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1552534285828442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a574d8877e31bee4abd5fe4ffd6b2bde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRayDistance: 30
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &114692402456837994
 MonoBehaviour:
   m_ObjectHideFlags: 1
