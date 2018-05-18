@@ -234,6 +234,8 @@ PlayerSettings:
   appleDeveloperTeamID: John Sietsma
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
+  iOSManualSigningProvisioningProfileType: 0
+  tvOSManualSigningProvisioningProfileType: 0
   appleEnableAutomaticSigning: 0
   iOSRequireARKit: 1
   appleEnableProMotion: 0

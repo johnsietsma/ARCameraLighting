@@ -1,8 +1,8 @@
 # AR Environmental Lighting
-Tested on Unity 2018.1.0b13
+Tested on Unity 2018.1.0f2
 
 Captures the camera video frame and uses it for spherical environment mapping.
-ARKit 1.5 and ARCore 1.0 supported.
+ARKit 1.5 and ARCore 1.2 supported.
 
 The main stage are:
 1. Capture the Camera Background

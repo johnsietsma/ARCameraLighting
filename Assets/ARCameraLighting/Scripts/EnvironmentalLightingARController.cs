@@ -1,27 +1,60 @@
-﻿
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Rendering;
-using GoogleARCore;
-using GoogleARCore.HelloAR;
+﻿//-----------------------------------------------------------------------
+// <copyright file="HelloARController.cs" company="Google">
+//
+// Copyright 2017 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// </copyright>
+//-----------------------------------------------------------------------
 
+//
+// This is a copy of the HelloARController provided in the HelloAR example from ARCore.
+// The only differences are:
+//    - It send a message when a plane is hit after a touch, rather then placing Andy directly.
+//    - It doesn't use the SnackBar to display searching for plane and error messages.
+//
+
+
+using System.Collections.Generic;
+using GoogleARCore;
+using UnityEngine;
+
+#if UNITY_EDITOR
+// Set up touch input propagation while using Instant Preview in the editor.
+using Input = GoogleARCore.InstantPreviewInput;
+#endif
 
 /// <summary>
-/// Controller for the environment AR lighting app. Mostly copied from HelloAR.
+/// Controls the HelloAR example.
 /// </summary>
 public class EnvironmentalLightingARController : MonoBehaviour
 {
     /// <summary>
-    /// A prefab for tracking and visualizing detected planes.
+    /// The first-person camera being used to render the passthrough camera image (i.e. AR background).
     /// </summary>
-    public GameObject TrackedPlanePrefab;
+    public Camera FirstPersonCamera;
 
     /// <summary>
-    /// A list to hold new planes ARCore began tracking in the current frame. This object is used across
+    /// The rotation in degrees need to apply to model when the Andy model is placed.
+    /// </summary>
+    private const float k_ModelRotation = 180.0f;
+
+    /// <summary>
+    /// A list to hold all planes ARCore is tracking in the current frame. This object is used across
     /// the application to avoid per-frame allocations.
     /// </summary>
-    private List<TrackedPlane> m_NewPlanes = new List<TrackedPlane>();
+    private List<DetectedPlane> m_AllPlanes = new List<DetectedPlane>();
 
     /// <summary>
     /// True if the app is in the process of quitting due to an ARCore connection error, otherwise false.
@@ -33,34 +66,7 @@ public class EnvironmentalLightingARController : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
-        _QuitOnConnectionErrors();
-
-        // Check that motion tracking is tracking.
-        if (Session.Status != SessionStatus.Tracking)
-        {
-            const int lostTrackingSleepTimeout = 15;
-            Screen.sleepTimeout = lostTrackingSleepTimeout;
-            return;
-        }
-
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
-
-        // Iterate over planes found in this frame and instantiate corresponding GameObjects to visualize them.
-        Session.GetTrackables<TrackedPlane>(m_NewPlanes, TrackableQueryFilter.New);
-        for (int i = 0; i < m_NewPlanes.Count; i++)
-        {
-            // Instantiate a plane visualization prefab and set it to track the new plane. The transform is set to
-            // the origin with an identity rotation since the mesh for our prefab is updated in Unity World
-            // coordinates.
-            GameObject planeObject = Instantiate(TrackedPlanePrefab, Vector3.zero, Quaternion.identity,
-                transform);
-            planeObject.GetComponent<TrackedPlaneVisualizer>().Initialize(m_NewPlanes[i]);
-        }
+        _UpdateApplicationLifecycle();
 
         // If the player has not touched the screen, we are done with this update.
         Touch touch;
@@ -71,71 +77,65 @@ public class EnvironmentalLightingARController : MonoBehaviour
 
         // Raycast against the location the player touched to search for planes.
         TrackableHit hit;
-        TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinInfinity |
-                                          TrackableHitFlags.FeaturePointWithSurfaceNormal;
+        TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
+            TrackableHitFlags.FeaturePointWithSurfaceNormal;
 
         if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
         {
-            Debug.Log("Hit a plane");
-            // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
-            // world evolves.
-            var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+            // Use hit pose and camera pose to check if hittest is from the
+            // back of the plane, if it is, no need to create the anchor.
+            if ((hit.Trackable is DetectedPlane) &&
+                Vector3.Dot(FirstPersonCamera.transform.position - hit.Pose.position,
+                    hit.Pose.rotation * Vector3.up) < 0)
+            {
+                Debug.Log("Hit at back of the current DetectedPlane");
+            }
+            else
+            {
+                // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
+                // world evolves.
+                var anchor = hit.Trackable.CreateAnchor(hit.Pose);
 
-            SendMessageUpwards("PlaneHit", anchor.transform);
+                // JPS: Let other objects know a plane has been hit
+                SendMessageUpwards("PlaneHit", anchor.transform);
+            }
         }
     }
 
     /// <summary>
-    /// Quit the application if there was a connection error for the ARCore session.
+    /// Check and update the application lifecycle.
     /// </summary>
-    private void _QuitOnConnectionErrors()
+    private void _UpdateApplicationLifecycle()
     {
+        // Exit the app when the 'back' button is pressed.
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
+        // Only allow the screen to sleep when not tracking.
+        if (Session.Status != SessionStatus.Tracking)
+        {
+            const int lostTrackingSleepTimeout = 15;
+            Screen.sleepTimeout = lostTrackingSleepTimeout;
+        }
+        else
+        {
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        }
+
         if (m_IsQuitting)
         {
             return;
         }
 
-        // Quit if ARCore was unable to connect and give Unity some time for the toast to appear.
-        if (Session.Status == SessionStatus.ErrorPermissionNotGranted)
-        {
-            _ShowAndroidToastMessage("Camera permission is needed to run this application.");
-            m_IsQuitting = true;
-            Invoke("DoQuit", 0.5f);
-        }
-        else if (Session.Status.IsError())
-        {
-            _ShowAndroidToastMessage("ARCore encountered a problem connecting.  Please start the app again.");
-            m_IsQuitting = true;
-            Invoke("DoQuit", 0.5f);
-        }
     }
 
     /// <summary>
     /// Actually quit the application.
     /// </summary>
-    private void DoQuit()
+    private void _DoQuit()
     {
         Application.Quit();
-    }
-
-    /// <summary>
-    /// Show an Android toast message.
-    /// </summary>
-    /// <param name="message">Message string to show in the toast.</param>
-    private void _ShowAndroidToastMessage(string message)
-    {
-        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-
-        if (unityActivity != null)
-        {
-            AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
-            unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
-            {
-                AndroidJavaObject toastObject = toastClass.CallStatic<AndroidJavaObject>("makeText", unityActivity,
-                    message, 0);
-                toastObject.Call("show");
-            }));
-        }
     }
 }
